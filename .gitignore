@@ -105,16 +105,17 @@ venv.bak/
 
 # personal
 .vscode
+.idea
 .DS_Store
-./test
-test.py
+log
+out
+test
 
 # packages
 build
 .git
 *.egg-info
 dist
-output
 coco
 backup
 *.weights

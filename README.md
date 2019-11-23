@@ -1,4 +1,4 @@
-# dashboard-ocr
+# Dashboard OCR
 
 Python OCR integral frame for Industry Dashboards
 
@@ -19,7 +19,7 @@ Python OCR integral frame for Industry Dashboards
 
    You also need to change the MySQL password in `config.py`.
 
-3. Create the environment.
+3. Create the environment and install dependencies.
 
    ```
    $ cd dashboard-ocr
@@ -27,10 +27,11 @@ Python OCR integral frame for Industry Dashboards
    $ conda activate dashboard-ocr
    $ python -V
    Python 3.6.8 :: Anaconda, Inc. 
+   $ python -m pip install -r requirements.txt
    ```
 
-   If you want to update your environment, use:
-
+   If you want to edit or update your environment, use:
+   
    ```
    $ conda env update -f environment.yml
    ```
@@ -40,7 +41,7 @@ Python OCR integral frame for Industry Dashboards
    * PyTorch-YOLOv3 : A minimal PyTorch implementation of YOLOv3, with support for training, inference and evaluation. Download pretrained weights
 
      ```
-     $ cd weights/
+     $ cd ./packages/yolov3/weights/
      $ bash download_weights.sh
      ```
 

@@ -1,20 +1,15 @@
 name: dashboard-ocr
 dependencies:
   - python=3.6
-  - pip:
-    - pandas
-    - pymysql
-    - flask
-    - pyecharts
-    - openpyxl
-    - pylint
-    - yapf
-    - numpy
-    - torch>=1.0
-    - torchvision
-    - matplotlib
-    - tensorflow
-    - tensorboard
-    - terminaltables
-    - pillow
-    - tqdm
+  - pandas
+  - pymysql
+  - flask
+  - openpyxl
+  - pylint
+  - yapf
+  - numpy
+  - matplotlib
+  - tensorflow
+  - tensorboard
+  - pillow
+  - tqdm
