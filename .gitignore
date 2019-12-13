@@ -108,7 +108,8 @@ venv.bak/
 .idea
 .DS_Store
 log
-out
+
+test
 test.py
 
 # packages

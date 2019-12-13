@@ -114,9 +114,6 @@ def detect(img_raw):
     cmap = plt.get_cmap("tab20b")
     colors = [cmap(i) for i in np.linspace(0, 1, 20)]
 
-    print("\nSaving images:")
-    # Save plot of detections
-
     # Create plot
     img = np.array(img_raw)
     plt.figure()
