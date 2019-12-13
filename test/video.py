@@ -1,18 +1,12 @@
 import cv2
+import time
+from datetime import datetime as dt
 
-cv2.namedWindow("preview")
-cap = cv2.VideoCapture(1)
+cap = cv2.VideoCapture(0)
 
-rval, frame = cap.read()
-
-while True:
-    if frame is not None:
-        cv2.imshow("preview", frame)
-    rval, frame = cap.read()
-
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
-
-# When everything done, release the capture
-cap.release()
-cv2.destroyAllWindows()
+while (True):
+    # get a frame
+    ret, frame = cap.read()
+    # save images
+    cv2.imwrite('./image/{:%Y_%m_%d %H_%M_%S}.jpg'.format(dt.now()), frame)
+    time.sleep(1)
