@@ -66,5 +66,5 @@ Python OCR integral frame for Industry Dashboards
 ### Request (Run `chcp 65001` first if you want to use CMD in order to adjust utf-8 display)
 
 ```
-curl -F "file=@./1.jpg" http://localhost:8080/
+curl -F "file=@./1.jpg" http://localhost:8000/
 ```
