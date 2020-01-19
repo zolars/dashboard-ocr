@@ -109,7 +109,6 @@ venv.bak/
 .DS_Store
 log
 out
-test
 test.py
 
 # packages

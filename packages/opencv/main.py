@@ -24,7 +24,7 @@ def dist_2_pts(x1, y1, x2, y2):
     return np.sqrt((x2 - x1)**2 + (y2 - y1)**2)
 
 
-def calibrate_dashboard(imgPath, dashboard_number, file_type):
+def calibrate(img):
     '''
     This function should be run using a test image in order to calibrate the range available to the dial as well as the
     units.  It works by first finding the center point and radius of the dashboard.  Then it draws lines at hard coded intervals
@@ -34,18 +34,15 @@ def calibrate_dashboard(imgPath, dashboard_number, file_type):
     the dashboard is linear (as most probably are).
     It will return the min value with angle in degrees (as a tuple), the max value with angle in degrees (as a tuple),
     and the units (as a string).
-    这个函数用测试图片来校准刻度盘和刻度盘可用的范围单位. 需要之前所得的中心点以及半径. 然后绘制出刻度. 
-    需要输入表盘读数最小角度, 最大角度,最小值, 最大值, 以及单位 (min_angle,max_angle,min_value,max_value,units)        
     '''
 
-    img = cv2.imread(imgPath + '%s.%s' % (dashboard_number, file_type))
     height, width = img.shape[:2]
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)  # convert to gray
     # gray = cv2.GaussianBlur(gray, (5, 5), 0)
     # gray = cv2.medianBlur(gray, 5)
 
     # for testing, output gray image
-    # cv2.imwrite(imgPath + '%s-bw.%s' %(dashboard_number, file_type),gray)
+    # cv2.imwrite('./out/%s-bw.%s' %(0, 'jpg'),gray)
 
     # detect circles
     # restricting the search from 35-48% of the possible radii gives fairly good results across different samples.  Remember that
@@ -74,18 +71,15 @@ def calibrate_dashboard(imgPath, dashboard_number, file_type):
                cv2.LINE_AA)  # draw center of circle
 
     # for testing, output circles on image
-    # cv2.imwrite(imgPath + '%s-circles.%s' % (dashboard_number, file_type), img)
+    # cv2.imwrite('./out/%s-circles.%s' % (0, 'jpg'), img)
 
     # for calibration, plot lines from center going out at every 10 degrees and add marker
-    # for i from 0 to 36 (every 10 deg)
     '''
     goes through the motion of a circle and sets x and y values based on the set separation spacing.  Also adds text to each
     line.  These lines and text labels serve as the reference point for the user to enter
     NOTE: by default this approach sets 0/360 to be the +x axis (if the image has a cartesian grid in the middle), the addition
     (i+9) in the text offset rotates the labels by 90 degrees so 0/360 is at the bottom (-y in cartesian).  So this assumes the
     dashboard is aligned in the image, but it can be adjusted by changing the value of 9 to something else.
-    根据画出的刻度值, 给定x, y的值, 并在此位置添加文本信息. 
-    这些刻度和文本标签用作用户输入的参考点
     '''
     separation = 10.0  # in degrees
     interval = int(360 / separation)
@@ -122,28 +116,14 @@ def calibrate_dashboard(imgPath, dashboard_number, file_type):
                     (int(p_text[i][0]), int(p_text[i][1])),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.3, (0, 0, 0), 1, cv2.LINE_AA)
 
-    cv2.imwrite(imgPath + '%s-calibration.%s' % (dashboard_number, file_type),
-                img)
+    # output the img for test
+    #cv2.imwrite('./out/%s-calibration.%s' % (0, 'jpg'), img)
 
-    # get user input on min, max, values, and units
-    print('dashboard number: %s' % dashboard_number)
-    min_angle = input(
-        'Min angle (lowest possible angle of dial) - in degrees: '
-    )  # the lowest possible angle
-    max_angle = input('Max angle (highest possible angle) - in degrees: '
-                      )  # highest possible angle
-    min_value = input('Min value: ')  # usually zero
-    max_value = input('Max value: ')  # maximum reading of the dashboard
-    units = input('Enter units: ')
-
-    return min_angle, max_angle, min_value, max_value, units, x, y, r
+    return img, x, y, r
 
 
-def get_current_value(imgPath, img, min_angle, max_angle, min_value, max_value,
-                      x, y, r, dashboard_number, file_type):
-
-    # for testing purposes
-    # img = cv2.imread('%s.%s' % (dashboard_number, file_type))
+def get_current_value(img, min_angle, max_angle, min_value, max_value, x, y,
+                      r):
 
     gray2 = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
@@ -157,11 +137,11 @@ def get_current_value(imgPath, img, min_angle, max_angle, min_value, max_value,
     # th, dst3 = cv2.threshold(gray2, thresh, maxValue, cv2.THRESH_TRUNC);
     # th, dst4 = cv2.threshold(gray2, thresh, maxValue, cv2.THRESH_TOZERO);
     # th, dst5 = cv2.threshold(gray2, thresh, maxValue, cv2.THRESH_TOZERO_INV);
-    # cv2.imwrite(imgPath + '%s-dst1.%s' % (dashboard_number, file_type), dst1)
-    # cv2.imwrite(imgPath + '%s-dst2.%s' % (dashboard_number, file_type), dst2)
-    # cv2.imwrite(imgPath + '%s-dst3.%s' % (dashboard_number, file_type), dst3)
-    # cv2.imwrite(imgPath + '%s-dst4.%s' % (dashboard_number, file_type), dst4)
-    # cv2.imwrite(imgPath + '%s-dst5.%s' % (dashboard_number, file_type), dst5)
+    # cv2.imwrite('./out/%s-dst1.%s' % (0, 'jpg'), dst1)
+    # cv2.imwrite('./out/%s-dst2.%s' % (0, 'jpg'), dst2)
+    # cv2.imwrite('./out/%s-dst3.%s' % (0, 'jpg'), dst3)
+    # cv2.imwrite('./out/%s-dst4.%s' % (0, 'jpg'), dst4)
+    # cv2.imwrite('./out/%s-dst5.%s' % (0, 'jpg'), dst5)
 
     # apply thresholding which helps for finding lines
     th, dst2 = cv2.threshold(gray2, thresh, maxValue, cv2.THRESH_BINARY_INV)
@@ -172,8 +152,7 @@ def get_current_value(imgPath, img, min_angle, max_angle, min_value, max_value,
     dst2 = cv2.GaussianBlur(dst2, (5, 5), 0)
 
     # for testing, show image after thresholding
-    cv2.imwrite(imgPath + '%s-tempdst2.%s' % (dashboard_number, file_type),
-                dst2)
+    cv2.imwrite('./out/%s-tempdst2.%s' % (0, 'jpg'), dst2)
 
     # find lines
     minLineLength = 10
@@ -191,9 +170,7 @@ def get_current_value(imgPath, img, min_angle, max_angle, min_value, max_value,
     for i in range(0, len(lines)):
         for x1, y1, x2, y2 in lines[i]:
             cv2.line(img, (x1, y1), (x2, y2), (0, 255, 0), 2)
-            cv2.imwrite(
-                imgPath + '%s-lines-test.%s' % (dashboard_number, file_type),
-                img)
+            cv2.imwrite('./out/%s-lines-test.%s' % (0, 'jpg'), img)
 
     # remove all lines outside a given radius
     final_line_list = []
@@ -234,15 +211,12 @@ def get_current_value(imgPath, img, min_angle, max_angle, min_value, max_value,
             xx1, yy1, xx2, yy2 = x1, y1, x2, y2
             max_length = dist_2_pts(x1, y1, x2, y2)
         cv2.line(img, (x1, y1), (x2, y2), (0, 0, 255), 2)
-        cv2.imwrite(
-            imgPath + '%s-lines-filter.%s' % (dashboard_number, file_type),
-            img)
+        cv2.imwrite('./out/%s-lines-filter.%s' % (0, 'jpg'), img)
 
     # assumes the longest line is the best one
     x1, y1, x2, y2 = xx1, yy1, xx2, yy2
     cv2.line(img, (x1, y1), (x2, y2), (255, 0, 0), 2)
-    cv2.imwrite(imgPath + '%s-lines-filter.%s' % (dashboard_number, file_type),
-                img)
+    cv2.imwrite('./out/%s-lines-filter.%s' % (0, 'jpg'), img)
 
     # find the farthest point from the center to be what is used to determine the angle
     dist_pt_0 = dist_2_pts(x, y, x1, y1)
@@ -286,18 +260,5 @@ def get_current_value(imgPath, img, min_angle, max_angle, min_value, max_value,
     return new_value
 
 
-def detect(imgPath, dashboard_number, file_type):
-    # name the calibration image of your dashboard 'dashboard-#.jpg', for example 'dashboard-5.jpg'.  It's written this way so you can easily try multiple images
-    min_angle, max_angle, min_value, max_value, units, x, y, r = calibrate_dashboard(
-        imgPath, dashboard_number, file_type)
-
-    # feed an image (or frame) to get the current value, based on the calibration, by default uses same image as calibration
-    img = cv2.imread(imgPath + '%s.%s' % (dashboard_number, file_type))
-
-    val = get_current_value(imgPath, img, min_angle, max_angle, min_value,
-                            max_value, x, y, r, dashboard_number, file_type)
-    print('Current reading: %s %s' % (val, units))
-
-
 if __name__ == '__main__':
-    detect(7, 'jpg')
+    pass

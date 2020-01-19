@@ -10,14 +10,12 @@ Python OCR integral frame for Industry Dashboards
    $ git clone https://github.com/zolars/dashboard-ocr.git
    ```
 
-2. You need to install [Miniconda](https://docs.conda.io/en/latest/miniconda.html) and [MySQL](http://dev.mysql.com/downloads/mysql/) on your computer.
+2. You need to install [Miniconda](https://docs.conda.io/en/latest/miniconda.html) and [SQLite](https://sqlite.org) on your computer.
 
    ```
    $ conda -V
    conda 4.7.11
    ```
-
-   You also need to change the MySQL password in `config.py`.
 
 3. Create the environment and install dependencies.
 
@@ -45,20 +43,12 @@ Python OCR integral frame for Industry Dashboards
      $ bash download_weights.sh
      ```
 
-5. Create a new DATABASE with MySQL.
-
-   ```
-   $ mysql -u root -p
-   Enter password:xxxxxx
-   mysql> create DATABASE dashboard;
-   mysql> use dashboard;
-   Database changed
-   ```
-
-6. Run the app.
+5. Run the app.
    ```
    $ conda activate dashboard-ocr
-   $ python app.py
+   $ export FLASK_APP=app
+   $ export FLASK_ENV=development
+   $ flask run
    ```
 
 ## Test

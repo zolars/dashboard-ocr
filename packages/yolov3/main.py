@@ -4,6 +4,7 @@ from .models import *
 from .utils.utils import *
 from .utils.datasets import *
 
+import io
 import os
 import sys
 import time
@@ -17,12 +18,16 @@ from torch.utils.data import DataLoader
 from torchvision import datasets
 from torch.autograd import Variable
 
+import matplotlib
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 from matplotlib.ticker import NullLocator
 
 
 def detect(img_raw):
+    matplotlib.use('agg')
+    matplotlib.pyplot.switch_backend('Agg')
+
     parser = argparse.ArgumentParser()
     parser.add_argument("--model_def",
                         type=str,
@@ -60,6 +65,7 @@ def detect(img_raw):
     parser.add_argument("--checkpoint_model",
                         type=str,
                         help="path to checkpoint model")
+    parser.add_argument("run", type=str, help="default flask instruction")
     opt = parser.parse_args()
     print(opt)
 
@@ -170,4 +176,12 @@ def detect(img_raw):
     plt.axis("off")
     plt.gca().xaxis.set_major_locator(NullLocator())
     plt.gca().yaxis.set_major_locator(NullLocator())
-    return plt, cropped
+
+    # Explicitly closing
+    buf = io.BytesIO()
+    plt.savefig(buf, format='png')
+    plt_bytes = buf.getvalue()
+    plt.close()
+    buf.close()
+
+    return plt_bytes, cropped
