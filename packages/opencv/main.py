@@ -2,6 +2,7 @@
 
 import cv2
 import numpy as np
+import math
 import time
 
 
@@ -65,22 +66,17 @@ def calibrate(img):
     #获取圆的坐标x,y和半径r
     x, y, r = avg_circles(circles, b)
 
+    return x, y, r
+
+
+def draw_calibration(img, x, y, r):
     # draw center and circle
     cv2.circle(img, (x, y), r, (0, 0, 255), 3, cv2.LINE_AA)  # draw circle
     cv2.circle(img, (x, y), 2, (0, 255, 0), 3,
                cv2.LINE_AA)  # draw center of circle
 
-    # for testing, output circles on image
-    # cv2.imwrite('./out/%s-circles.%s' % (0, 'jpg'), img)
-
     # for calibration, plot lines from center going out at every 10 degrees and add marker
-    '''
-    goes through the motion of a circle and sets x and y values based on the set separation spacing.  Also adds text to each
-    line.  These lines and text labels serve as the reference point for the user to enter
-    NOTE: by default this approach sets 0/360 to be the +x axis (if the image has a cartesian grid in the middle), the addition
-    (i+9) in the text offset rotates the labels by 90 degrees so 0/360 is at the bottom (-y in cartesian).  So this assumes the
-    dashboard is aligned in the image, but it can be adjusted by changing the value of 9 to something else.
-    '''
+
     separation = 10.0  # in degrees
     interval = int(360 / separation)
     p1 = np.zeros((interval, 2))  # set empty arrays
@@ -89,23 +85,23 @@ def calibrate(img):
     for i in range(0, interval):
         for j in range(0, 2):
             if (j % 2 == 0):
-                p1[i][j] = x + 0.9 * r * np.cos(
-                    separation * i * 3.14 / 180)  # point for lines
+                p1[i][j] = x + 0.5 * r * np.cos(
+                    separation * i * math.pi / 180)  # point for lines
             else:
-                p1[i][j] = y + 0.9 * r * np.sin(separation * i * 3.14 / 180)
+                p1[i][j] = y + 0.5 * r * np.sin(separation * i * math.pi / 180)
     text_offset_x = 10
     text_offset_y = 5
     for i in range(0, interval):
         for j in range(0, 2):
             if (j % 2 == 0):
-                p2[i][j] = x + r * np.cos(separation * i * 3.14 / 180)
+                p2[i][j] = x + r * np.cos(separation * i * math.pi / 180)
                 p_text[i][j] = x - text_offset_x + 1.2 * r * np.cos(
-                    (separation) * (i + 9) * 3.14 / 180
+                    (separation) * (i + 9) * math.pi / 180
                 )  # point for text labels, i+9 rotates the labels by 90 degrees
             else:
-                p2[i][j] = y + r * np.sin(separation * i * 3.14 / 180)
+                p2[i][j] = y + r * np.sin(separation * i * math.pi / 180)
                 p_text[i][j] = y + text_offset_y + 1.2 * r * np.sin(
-                    (separation) * (i + 9) * 3.14 / 180
+                    (separation) * (i + 9) * math.pi / 180
                 )  # point for text labels, i+9 rotates the labels by 90 degrees
 
     # add the lines and labels to the image
@@ -115,11 +111,6 @@ def calibrate(img):
         cv2.putText(img, '%s' % (int(i * separation)),
                     (int(p_text[i][0]), int(p_text[i][1])),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.3, (0, 0, 0), 1, cv2.LINE_AA)
-
-    # output the img for test
-    #cv2.imwrite('./out/%s-calibration.%s' % (0, 'jpg'), img)
-
-    return img, x, y, r
 
 
 def get_current_value(img, min_angle, max_angle, min_value, max_value, x, y,
