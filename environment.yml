@@ -13,3 +13,4 @@ dependencies:
   - tensorboard
   - pillow
   - tqdm
+  - requests

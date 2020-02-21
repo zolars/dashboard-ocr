@@ -1,3 +1,5 @@
+import os
+import json
 import logging
 import click
 from flask import current_app, g
@@ -13,11 +15,20 @@ from app.config import config
 class MySQL:
     def __init__(self):
         try:
+            assert os.path.exists(os.path.join('instance', 'mysql.conf.json'))
+            with open(os.path.join('instance', 'mysql.conf.json')) as f:
+                config = json.load(f)
+                assert config['MYSQL_USERNAME']
+                assert config['MYSQL_PASSWORD']
+        except Exception as e:
+            raise Exception
+
+        try:
             self._conn = pymysql.connect(
                 host='localhost',  # mysql server address
                 port=3306,  # port num
-                user=config['development'].MYSQL_USERNAME,  # username
-                passwd=config['development'].MYSQL_PASSWORD,  # password
+                user=config['MYSQL_USERNAME'],  # username
+                passwd=config['MYSQL_PASSWORD'],  # password
                 db='dashboard',
                 charset='utf8',
             )
@@ -25,8 +36,8 @@ class MySQL:
             self._conn = pymysql.connect(
                 host='localhost',  # mysql server address
                 port=3306,  # port num
-                user=config['development'].MYSQL_USERNAME,  # username
-                passwd=config['development'].MYSQL_PASSWORD,  # password
+                user=config['MYSQL_USERNAME'],  # username
+                passwd=config['MYSQL_PASSWORD'],  # password
                 charset='utf8',
             )
         self._cur = self._conn.cursor()

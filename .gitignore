@@ -121,3 +121,4 @@ backup
 *.weights
 checkpoints
 *.conv.74
+ip_camera.json

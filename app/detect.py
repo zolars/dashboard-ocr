@@ -9,7 +9,7 @@ from werkzeug.exceptions import abort
 
 from app.db import get_db, close_db
 
-# Perform images detection
+# belong to detect.py
 import cv2
 from PIL import Image
 import numpy as np

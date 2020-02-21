@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <title>Dashboard OCR | {{ title }}</title>
+
+    <link
+      href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <!-- PNotify-CSS -->
+    <link
+      href="{{url_for('static', filename='css/pnotify.css') }}"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <!-- Animate-CSS -->
+    <link
+      href="{{url_for('static', filename='css/animate.css') }}"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link
+      href="{{ url_for('static', filename='css/nunito.css') }}"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link
+      href="{{ url_for('static', filename='css/default.min.css') }}"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body id="page-top">
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+      <!-- Sidebar -->
+      <ul
+        class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion"
+        id="accordionSidebar"
+      >
+        <!-- Sidebar - Brand -->
+        <a
+          class="sidebar-brand d-flex align-items-center justify-content-center"
+          href="{{ url_for('pages.dashboard') }}"
+        >
+          <div class="sidebar-brand-icon rotate-n-15">
+            <i class="fas fa-tachometer-alt"></i>
+          </div>
+          <div class="sidebar-brand-text mx-3">Dashboard OCR<sup>2</sup></div>
+        </a>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider my-0" />
+
+        <!-- Nav Item - Dashboard -->
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('pages.dashboard') }}">
+            <i class="fas fa-fw fa-home"></i>
+            <span>Dashboard</span></a
+          >
+        </li>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider" />
+
+        <!-- Heading -->
+        <div class="sidebar-heading">
+          Analysis
+        </div>
+
+        <!-- Nav Item - Charts -->
+        <li class="nav-item">
+          <a class="nav-link" href="charts.html">
+            <i class="fas fa-fw fa-chart-area"></i>
+            <span>Charts</span></a
+          >
+        </li>
+
+        <!-- Nav Item - Tables -->
+        <li class="nav-item">
+          <a class="nav-link" href="tables.html">
+            <i class="fas fa-fw fa-table"></i>
+            <span>Tables</span></a
+          >
+        </li>
+
+        <!-- Nav Item - Alerts -->
+        <li class="nav-item">
+          <a class="nav-link" href="alerts.html">
+            <i class="fas fa-fw fa-exclamation-triangle"></i>
+            <span>Alerts</span></a
+          >
+        </li>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider" />
+
+        <!-- Heading -->
+        <div class="sidebar-heading">
+          Config
+        </div>
+
+        <!-- Nav Item - Database -->
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('pages.database') }}">
+            <i class="fas fa-fw fa-database"></i>
+            <span>Database</span></a
+          >
+        </li>
+
+        <!-- Nav Item - Video Capture Collapse Menu -->
+        <li class="nav-item">
+          <a
+            class="nav-link collapsed"
+            href="#"
+            data-toggle="collapse"
+            data-target="#collapseVideoCapture"
+            aria-expanded="true"
+            aria-controls="collapseVideoCapture"
+          >
+            <i class="fas fa-fw fa-video"></i>
+            <span>Video Capture</span>
+          </a>
+          <div
+            id="collapseVideoCapture"
+            class="collapse"
+            aria-labelledby="headingVideoCapture"
+            data-parent="#accordionSidebar"
+          >
+            <div class="bg-white py-2 collapse-inner rounded">
+              <h6 class="collapse-header">Devices List:</h6>
+              <a class="collapse-item" href="device_1.html">Device_1</a>
+              <a class="collapse-item" href="device_2.html">Device_2</a>
+              <a class="collapse-item" href="device_add.html">Add One</a>
+            </div>
+          </div>
+        </li>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider d-none d-md-block" />
+
+        <!-- Sidebar Toggler (Sidebar) -->
+        <div class="text-center d-none d-md-inline">
+          <button class="rounded-circle border-0" id="sidebarToggle"></button>
+        </div>
+      </ul>
+
+      <!-- End of Sidebar -->
+
+      <!-- Content Wrapper -->
+      <div id="content-wrapper" class="d-flex flex-column">
+        <!-- Topbar -->
+        <nav
+          class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow"
+        >
+          <!-- Sidebar Toggle (Topbar) -->
+          <button
+            id="sidebarToggleTop"
+            class="btn btn-link d-md-none rounded-circle mr-3"
+          >
+            <i class="fa fa-bars"></i>
+          </button>
+
+          <!-- Topbar Search -->
+          <form
+            class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search"
+          >
+            <div class="input-group">
+              <input
+                type="text"
+                class="form-control bg-light border-0 small"
+                placeholder="Search for device..."
+                aria-label="Search"
+                aria-describedby="basic-addon2"
+              />
+              <div class="input-group-append">
+                <button class="btn btn-primary" type="button">
+                  <i class="fas fa-search fa-sm"></i>
+                </button>
+              </div>
+            </div>
+          </form>
+
+          <!-- Topbar Navbar -->
+          <ul class="navbar-nav ml-auto">
+            <!-- Nav Item - Search Dropdown (Visible Only XS) -->
+            <li class="nav-item dropdown no-arrow d-sm-none">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                id="searchDropdown"
+                role="button"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                <i class="fas fa-search fa-fw"></i>
+              </a>
+              <!-- Dropdown - Search -->
+              <div
+                class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
+                aria-labelledby="searchDropdown"
+              >
+                <form class="form-inline mr-auto w-100 navbar-search">
+                  <div class="input-group">
+                    <input
+                      type="text"
+                      class="form-control bg-light border-0 small"
+                      placeholder="Search for device..."
+                      aria-label="Search"
+                      aria-describedby="basic-addon2"
+                    />
+                    <div class="input-group-append">
+                      <button class="btn btn-primary" type="button">
+                        <i class="fas fa-search fa-sm"></i>
+                      </button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </li>
+
+            <!-- Nav Item - Alerts -->
+            <li class="nav-item dropdown no-arrow mx-1">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                id="alertsDropdown"
+                role="button"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                <i class="fas fa-bell fa-fw"></i>
+                <!-- Counter - Alerts -->
+                <span class="badge badge-danger badge-counter">3+</span>
+              </a>
+              <!-- Dropdown - Alerts -->
+              <div
+                class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                aria-labelledby="alertsDropdown"
+              >
+                <h6 class="dropdown-header">
+                  Alerts Center
+                </h6>
+                <a class="dropdown-item d-flex align-items-center" href="#">
+                  <div class="mr-3">
+                    <div class="icon-circle bg-primary">
+                      <i class="fas fa-file-alt text-white"></i>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="small text-gray-500">December 12, 2019</div>
+                    <span class="font-weight-bold"
+                      >A new monthly report is ready to download!</span
+                    >
+                  </div>
+                </a>
+                <a class="dropdown-item d-flex align-items-center" href="#">
+                  <div class="mr-3">
+                    <div class="icon-circle bg-success">
+                      <i class="fas fa-donate text-white"></i>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="small text-gray-500">December 7, 2019</div>
+                    $290.29 has been deposited into your account!
+                  </div>
+                </a>
+                <a class="dropdown-item d-flex align-items-center" href="#">
+                  <div class="mr-3">
+                    <div class="icon-circle bg-warning">
+                      <i class="fas fa-exclamation-triangle text-white"></i>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="small text-gray-500">December 2, 2019</div>
+                    Spending Alert: We've noticed unusually high spending for
+                    your account.
+                  </div>
+                </a>
+                <a
+                  class="dropdown-item text-center small text-gray-500"
+                  href="#"
+                  >Show All Alerts</a
+                >
+              </div>
+            </li>
+          </ul>
+        </nav>
+        <!-- End of Topbar -->
+
+        <!-- Main Content -->
+        <div id="content">
+          <!-- Begin Page Content -->
+          <div class="container-fluid">
+            {% block pageContent %} {% endblock %}
+          </div>
+          <!-- /.container-fluid -->
+        </div>
+        <!-- End of Main Content -->
+
+        <!-- Footer -->
+        <footer class="sticky-footer bg-white">
+          <div class="container my-auto">
+            <div class="copyright text-center my-auto">
+              <span>Copyright &copy; Dashboard OCR 2020</span>
+            </div>
+          </div>
+        </footer>
+        <!-- End of Footer -->
+      </div>
+      <!-- End of Content Wrapper -->
+    </div>
+    <!-- End of Page Wrapper -->
+
+    <!-- Scroll to Top Button -->
+    <a class="scroll-to-top rounded" href="#page-top">
+      <i class="fas fa-angle-up"></i>
+    </a>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript -->
+    <script src="https://cdn.staticfile.org/jquery-easing/1.4.1/jquery.easing.min.js"></script>
+
+    <!-- PNotify plugin JavaScript -->
+    <script
+      type="text/javascript"
+      src="{{url_for('static', filename='js/PNotify.js') }}"
+    ></script>
+    <script
+      type="text/javascript"
+      src="{{url_for('static', filename='js/PNotifyStyleMaterial.js') }}"
+    ></script>
+    <script
+      type="text/javascript"
+      src="{{url_for('static', filename='js/PNotifyButtons.js') }}"
+    ></script>
+    <script
+      type="text/javascript"
+      src="{{url_for('static', filename='js/PNotifyConfirm.js') }}"
+    ></script>
+    <script
+      type="text/javascript"
+      src="{{url_for('static', filename='js/PNotifyMobile.js') }}"
+    ></script>
+    <script
+      type="text/javascript"
+      src="{{url_for('static', filename='js/PNotifyAnimate.js') }}"
+    ></script>
+
+    <!-- Custom scripts for all pages -->
+    <script src="{{ url_for('static', filename='js/default.min.js') }}"></script>
+
+    <script type="text/javascript">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, message  in messages %}
+            {% if category == 'success' %}
+              PNotify.success({
+                text: '{{ message }}',
+                hide: true,
+                delay: 3000,
+                modules: {
+                  Buttons: {
+                    closer: true,
+                    sticker: false
+                  },
+                  Animate: {
+                    animate: true,
+                    inClass: 'rotateInUpRight',
+                    outClass: 'rotateOutUpRight'
+                  }
+                },
+              });
+            {% endif %}
+            {% if category == 'notice' %}
+              PNotify.notice({
+                title: 'Notice',
+                text: '{{ message }}',
+                hide: true,
+                delay: 3000,
+                modules: {
+                  Buttons: {
+                    closer: true,
+                    sticker: false
+                  },
+                  Animate: {
+                    animate: true,
+                    inClass: 'rotateInUpRight',
+                    outClass: 'rotateOutUpRight'
+                  }
+                },
+              });
+            {% endif %}
+            {% if category == 'info' %}
+              PNotify.info({
+                title: 'Message',
+                text: '{{ message }}',
+                hide: true,
+                delay: 3000,
+                modules: {
+                  Buttons: {
+                    closer: true,
+                    sticker: false
+                  },
+                  Animate: {
+                    animate: true,
+                    inClass: 'rotateInUpRight',
+                 x   outClass: 'rotateOutUpRight'
+                  }
+                },
+              });
+            {% endif %}
+            {% if category == 'error' %}
+              PNotify.error({
+                title: 'Error',
+                text: '{{ message }}',
+                hide: true,
+                delay: 3000,
+                modules: {
+                  Buttons: {
+                    closer: true,
+                    sticker: false
+                  },
+                  Animate: {
+                    animate: true,
+                    inClass: 'rotateInUpRight',
+                    outClass: 'rotateOutUpRight'
+                  }
+                },
+              });
+            {% endif %}
+         {% endfor %}
+      {% endif %} {% endwith %}
+    </script>
+  </body>
+</html>

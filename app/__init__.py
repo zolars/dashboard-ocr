@@ -47,12 +47,16 @@ def create_app(test_config=None):
     from . import db
     db.init_app(app)
 
+    from . import pages
+    app.register_blueprint(pages.bp)
+
     from . import detect
     app.register_blueprint(detect.bp)
 
-    # a simple page that says hello
-    @app.route('/')
-    def hello():
-        return 'hello world!'
+    @app.errorhandler(404)
+    def page_not_found(e):
+        # note that we set the 404 status explicitly
+        params = {'title': '404'}
+        return render_template('404.html', **params), 404
 
     return app
