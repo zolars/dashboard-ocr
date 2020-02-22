@@ -17,18 +17,13 @@
     />
     <!-- PNotify-CSS -->
     <link
-      href="{{url_for('static', filename='css/pnotify.css') }}"
+      href="{{ url_for('static', filename='css/pnotify.css') }}"
       rel="stylesheet"
       type="text/css"
     />
     <!-- Animate-CSS -->
     <link
-      href="{{url_for('static', filename='css/animate.css') }}"
-      rel="stylesheet"
-      type="text/css"
-    />
-    <link
-      href="{{ url_for('static', filename='css/nunito.css') }}"
+      href="{{ url_for('static', filename='css/animate.css') }}"
       rel="stylesheet"
       type="text/css"
     />
@@ -227,73 +222,6 @@
                 </form>
               </div>
             </li>
-
-            <!-- Nav Item - Alerts -->
-            <li class="nav-item dropdown no-arrow mx-1">
-              <a
-                class="nav-link dropdown-toggle"
-                href="#"
-                id="alertsDropdown"
-                role="button"
-                data-toggle="dropdown"
-                aria-haspopup="true"
-                aria-expanded="false"
-              >
-                <i class="fas fa-bell fa-fw"></i>
-                <!-- Counter - Alerts -->
-                <span class="badge badge-danger badge-counter">3+</span>
-              </a>
-              <!-- Dropdown - Alerts -->
-              <div
-                class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                aria-labelledby="alertsDropdown"
-              >
-                <h6 class="dropdown-header">
-                  Alerts Center
-                </h6>
-                <a class="dropdown-item d-flex align-items-center" href="#">
-                  <div class="mr-3">
-                    <div class="icon-circle bg-primary">
-                      <i class="fas fa-file-alt text-white"></i>
-                    </div>
-                  </div>
-                  <div>
-                    <div class="small text-gray-500">December 12, 2019</div>
-                    <span class="font-weight-bold"
-                      >A new monthly report is ready to download!</span
-                    >
-                  </div>
-                </a>
-                <a class="dropdown-item d-flex align-items-center" href="#">
-                  <div class="mr-3">
-                    <div class="icon-circle bg-success">
-                      <i class="fas fa-donate text-white"></i>
-                    </div>
-                  </div>
-                  <div>
-                    <div class="small text-gray-500">December 7, 2019</div>
-                    $290.29 has been deposited into your account!
-                  </div>
-                </a>
-                <a class="dropdown-item d-flex align-items-center" href="#">
-                  <div class="mr-3">
-                    <div class="icon-circle bg-warning">
-                      <i class="fas fa-exclamation-triangle text-white"></i>
-                    </div>
-                  </div>
-                  <div>
-                    <div class="small text-gray-500">December 2, 2019</div>
-                    Spending Alert: We've noticed unusually high spending for
-                    your account.
-                  </div>
-                </a>
-                <a
-                  class="dropdown-item text-center small text-gray-500"
-                  href="#"
-                  >Show All Alerts</a
-                >
-              </div>
-            </li>
           </ul>
         </nav>
         <!-- End of Topbar -->
@@ -337,113 +265,65 @@
     <!-- PNotify plugin JavaScript -->
     <script
       type="text/javascript"
-      src="{{url_for('static', filename='js/PNotify.js') }}"
+      src="{{ url_for('static', filename='js/PNotify/PNotify.js') }}"
     ></script>
     <script
       type="text/javascript"
-      src="{{url_for('static', filename='js/PNotifyStyleMaterial.js') }}"
+      src="{{ url_for('static', filename='js/PNotify/PNotifyStyleMaterial.js') }}"
     ></script>
     <script
       type="text/javascript"
-      src="{{url_for('static', filename='js/PNotifyButtons.js') }}"
+      src="{{ url_for('static', filename='js/PNotify/PNotifyButtons.js') }}"
     ></script>
     <script
       type="text/javascript"
-      src="{{url_for('static', filename='js/PNotifyConfirm.js') }}"
+      src="{{ url_for('static', filename='js/PNotify/PNotifyConfirm.js') }}"
     ></script>
     <script
       type="text/javascript"
-      src="{{url_for('static', filename='js/PNotifyMobile.js') }}"
+      src="{{ url_for('static', filename='js/PNotify/PNotifyMobile.js') }}"
     ></script>
     <script
       type="text/javascript"
-      src="{{url_for('static', filename='js/PNotifyAnimate.js') }}"
+      src="{{ url_for('static', filename='js/PNotify/PNotifyAnimate.js') }}"
+    ></script>
+    <script
+      type="text/javascript"
+      src="{{ url_for('static', filename='js/PNotify/PNotifyHistory.js') }}"
     ></script>
 
     <!-- Custom scripts for all pages -->
     <script src="{{ url_for('static', filename='js/default.min.js') }}"></script>
 
     <script type="text/javascript">
-        {% with messages = get_flashed_messages(with_categories=true) %}
+      PNotify.modules.History.defaults.maxInStack = 3;
+      var opts = {
+        textTrusted: true,
+        hide: true,
+        delay: 3000,
+        modules: {
+          Buttons: {
+            closer: true,
+            sticker: false
+          },
+          Animate: {
+            animate: true,
+            inClass: 'rotateInUpRight',
+            outClass: 'rotateOutUpRight'
+          }
+        },
+      };
+      {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
           {% for category, message  in messages %}
-            {% if category == 'success' %}
-              PNotify.success({
-                text: '{{ message }}',
-                hide: true,
-                delay: 3000,
-                modules: {
-                  Buttons: {
-                    closer: true,
-                    sticker: false
-                  },
-                  Animate: {
-                    animate: true,
-                    inClass: 'rotateInUpRight',
-                    outClass: 'rotateOutUpRight'
-                  }
-                },
-              });
-            {% endif %}
-            {% if category == 'notice' %}
-              PNotify.notice({
-                title: 'Notice',
-                text: '{{ message }}',
-                hide: true,
-                delay: 3000,
-                modules: {
-                  Buttons: {
-                    closer: true,
-                    sticker: false
-                  },
-                  Animate: {
-                    animate: true,
-                    inClass: 'rotateInUpRight',
-                    outClass: 'rotateOutUpRight'
-                  }
-                },
-              });
-            {% endif %}
-            {% if category == 'info' %}
-              PNotify.info({
-                title: 'Message',
-                text: '{{ message }}',
-                hide: true,
-                delay: 3000,
-                modules: {
-                  Buttons: {
-                    closer: true,
-                    sticker: false
-                  },
-                  Animate: {
-                    animate: true,
-                    inClass: 'rotateInUpRight',
-                 x   outClass: 'rotateOutUpRight'
-                  }
-                },
-              });
-            {% endif %}
-            {% if category == 'error' %}
-              PNotify.error({
-                title: 'Error',
-                text: '{{ message }}',
-                hide: true,
-                delay: 3000,
-                modules: {
-                  Buttons: {
-                    closer: true,
-                    sticker: false
-                  },
-                  Animate: {
-                    animate: true,
-                    inClass: 'rotateInUpRight',
-                    outClass: 'rotateOutUpRight'
-                  }
-                },
-              });
+            {% if category != 'warning' %}
+              opts.text = '{{ message }}';
+              opts.type = '{{ category }}';
+              PNotify.alert(opts);
             {% endif %}
          {% endfor %}
       {% endif %} {% endwith %}
     </script>
+    {% block js %} {% endblock %}
   </body>
 </html>

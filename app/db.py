@@ -13,22 +13,13 @@ from app.config import config
 
 
 class MySQL:
-    def __init__(self):
-        try:
-            assert os.path.exists(os.path.join('instance', 'mysql.conf.json'))
-            with open(os.path.join('instance', 'mysql.conf.json')) as f:
-                config = json.load(f)
-                assert config['MYSQL_USERNAME']
-                assert config['MYSQL_PASSWORD']
-        except Exception as e:
-            raise Exception
-
+    def __init__(self, username, password):
         try:
             self._conn = pymysql.connect(
                 host='localhost',  # mysql server address
                 port=3306,  # port num
-                user=config['MYSQL_USERNAME'],  # username
-                passwd=config['MYSQL_PASSWORD'],  # password
+                user=username,  # username
+                passwd=password,  # password
                 db='dashboard',
                 charset='utf8',
             )
@@ -36,8 +27,8 @@ class MySQL:
             self._conn = pymysql.connect(
                 host='localhost',  # mysql server address
                 port=3306,  # port num
-                user=config['MYSQL_USERNAME'],  # username
-                passwd=config['MYSQL_PASSWORD'],  # password
+                user=username,  # username
+                passwd=password,  # password
                 charset='utf8',
             )
         self._cur = self._conn.cursor()
@@ -57,12 +48,8 @@ class MySQL:
 
         with current_app.open_resource('schema.sql') as f:
             for sql in f.read().decode('utf8').split(';'):
-                try:
-                    self._cur.execute(sql)
-                    self._conn.commit()
-                except Exception as err:
-                    if err.args[0] != 1065:
-                        logging.error(err)
+                self._cur.execute(sql)
+                self._conn.commit()
 
     def clear(self):
         logging.info("Start to delete and clear the database...")
@@ -77,20 +64,14 @@ class MySQL:
         self._conn.close()
 
 
-def create_db():
-    g.db = MySQL()
-    g.db.create()
-
-
-def recreate_db():
-    g.db = MySQL()
-    g.db.clear()
-    g.db.create()
-
-
-def get_db():
+def get_db(username=None, password=None):
+    if not (username or password):
+        with open(os.path.join('instance', 'mysql.conf.json')) as f:
+            config = json.load(f)
+        username = config['MYSQL_USERNAME']
+        password = config['MYSQL_PASSWORD']
     if 'db' not in g:
-        g.db = MySQL()
+        g.db = MySQL(username, password)
     return g.db
 
 
@@ -101,23 +82,5 @@ def close_db(e=None):
         del db
 
 
-@click.command('create-db')
-@with_appcontext
-def create_db_command():
-    '''Create new tables.'''
-    create_db()
-    click.echo('Initialized the database.')
-
-
-@click.command('recreate-db')
-@with_appcontext
-def recreate_db_command():
-    '''Recreate the existing database.'''
-    recreate_db()
-    click.echo('Recreated the database.')
-
-
 def init_app(app):
     app.teardown_appcontext(close_db)
-    app.cli.add_command(create_db_command)
-    app.cli.add_command(recreate_db_command)

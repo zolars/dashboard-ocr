@@ -14,17 +14,39 @@ from app.utils import config_required
 import requests
 
 bp = Blueprint('pages', __name__)
-
-
-@bp.route('/config/database', methods=['GET', 'POST'])
-def database():
-    params = {'title': 'Database'}
-    return render_template('/database.html', **params)
+urls = {
+    'pages': {
+        'dashboard': '/',
+        'database': '/config/database',
+    },
+    'server': {
+        'testDatabase': '/testDatabase',
+        'saveDatabase': '/saveDatabase',
+        'initDatabase': '/initDatabase',
+        'resetDatabase': '/resetDatabase',
+    }
+}
 
 
 @bp.route('/', methods=['GET', 'POST'])
 @config_required
 def dashboard():
     flash('test', 'error')
-    params = {'title': 'Dashboard'}
-    return render_template('/dashboard.html', **params)
+    params = {}
+    dicts = {'title': 'Dashboard', 'params': params, 'urls': urls}
+    return render_template('/dashboard.html', **dicts)
+
+
+@bp.route('/config/database', methods=['GET', 'POST'])
+def database():
+
+    params = {}
+    if os.path.exists(os.path.join('instance', 'mysql.conf.json')):
+        with open(os.path.join('instance', 'mysql.conf.json')) as f:
+            config = json.load(f)
+            if config['MYSQL_USERNAME'] and config['MYSQL_PASSWORD']:
+                params['existedUsername'] = config['MYSQL_USERNAME']
+                params['existedPassword'] = config['MYSQL_PASSWORD']
+
+    dicts = {'title': 'Database', 'params': params, 'urls': urls}
+    return render_template('/database.html', **dicts)

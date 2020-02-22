@@ -50,8 +50,8 @@ def create_app(test_config=None):
     from . import pages
     app.register_blueprint(pages.bp)
 
-    from . import detect
-    app.register_blueprint(detect.bp)
+    from . import server
+    app.register_blueprint(server.bp)
 
     @app.errorhandler(404)
     def page_not_found(e):
