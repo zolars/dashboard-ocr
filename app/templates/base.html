@@ -135,9 +135,9 @@
             data-parent="#accordionSidebar"
           >
             <div class="bg-white py-2 collapse-inner rounded">
-              <h6 class="collapse-header">Devices List:</h6>
-              <a class="collapse-item" href="{{ url_for('pages.manageDevices') }}">Manage</a>
-              <a class="collapse-item" href="{{ url_for('pages.addDevices') }}">Add One</a>
+              <h6 class="collapse-header">device List:</h6>
+              <a class="collapse-item" href="{{ url_for('pages.managedevice') }}">Manage</a>
+              <a class="collapse-item" href="{{ url_for('pages.adddevice') }}">Add One</a>
             </div>
           </div>
         </li>
@@ -306,8 +306,8 @@
         pages: {
           dashboard: "{{ url_for('pages.dashboard') }}",
           database: "{{ url_for('pages.database') }}",
-          manageDevices: "{{ url_for('pages.manageDevices') }}",
-          addDevices: "{{ url_for('pages.addDevices') }}"
+          managedevice: "{{ url_for('pages.managedevice') }}",
+          adddevice: "{{ url_for('pages.adddevice') }}"
         },
         server: {
           testDatabase: "{{ url_for('server.testDatabase') }}",

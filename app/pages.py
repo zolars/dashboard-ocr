@@ -36,17 +36,17 @@ def database():
     return render_template('/config/database.html', **dicts)
 
 
-@bp.route('/config/manageDevices', methods=['GET'])
+@bp.route('/config/managedevice', methods=['GET'])
 @config_required
-def manageDevices():
+def managedevice():
     params = {}
-    dicts = {'title': 'Manage Devices', 'params': params}
-    return render_template('/config/manageDevices.html', **dicts)
+    dicts = {'title': 'Manage device', 'params': params}
+    return render_template('/config/managedevice.html', **dicts)
 
 
-@bp.route('/config/addDevices', methods=['GET'])
+@bp.route('/config/adddevice', methods=['GET'])
 @config_required
-def addDevices():
+def adddevice():
     params = {}
-    dicts = {'title': 'Add Devices', 'params': params}
-    return render_template('/config/addDevices.html', **dicts)
+    dicts = {'title': 'Add device', 'params': params}
+    return render_template('/config/adddevice.html', **dicts)
