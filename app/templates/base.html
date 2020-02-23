@@ -31,6 +31,10 @@
       href="{{ url_for('static', filename='css/default.min.css') }}"
       rel="stylesheet"
     />
+    <link
+      href="{{ url_for('static', filename='css/custom.css') }}"
+      rel="stylesheet"
+    />
   </head>
 
   <body id="page-top">
@@ -132,18 +136,17 @@
           >
             <div class="bg-white py-2 collapse-inner rounded">
               <h6 class="collapse-header">Devices List:</h6>
-              <a class="collapse-item" href="device_1.html">Device_1</a>
-              <a class="collapse-item" href="device_2.html">Device_2</a>
-              <a class="collapse-item" href="device_add.html">Add One</a>
+              <a class="collapse-item" href="{{ url_for('pages.manageDevices') }}">Manage</a>
+              <a class="collapse-item" href="{{ url_for('pages.addDevices') }}">Add One</a>
             </div>
           </div>
         </li>
 
         <!-- Divider -->
-        <hr class="sidebar-divider d-none d-md-block" />
+        <hr class="sidebar-divider d-md-block" />
 
         <!-- Sidebar Toggler (Sidebar) -->
-        <div class="text-center d-none d-md-inline">
+        <div class="text-center d-md-inline">
           <button class="rounded-circle border-0" id="sidebarToggle"></button>
         </div>
       </ul>
@@ -230,6 +233,8 @@
         <div id="content">
           <!-- Begin Page Content -->
           <div class="container-fluid">
+            <!-- Page Heading -->
+            <h1 class="h3 mb-4 text-gray-800">{% if title!='404' %}{{ title }}{% endif %}</h1>
             {% block pageContent %} {% endblock %}
           </div>
           <!-- /.container-fluid -->
@@ -296,6 +301,24 @@
     <script src="{{ url_for('static', filename='js/default.min.js') }}"></script>
 
     <script type="text/javascript">
+
+      var Urls = {
+        pages: {
+          dashboard: "{{ url_for('pages.dashboard') }}",
+          database: "{{ url_for('pages.database') }}",
+          manageDevices: "{{ url_for('pages.manageDevices') }}",
+          addDevices: "{{ url_for('pages.addDevices') }}"
+        },
+        server: {
+          testDatabase: "{{ url_for('server.testDatabase') }}",
+          saveDatabase: "{{ url_for('server.saveDatabase') }}",
+          initDatabase: "{{ url_for('server.initDatabase') }}",
+          resetDatabase: "{{ url_for('server.resetDatabase') }}",
+          testDevice: "{{ url_for('server.testDevice') }}",
+          saveDevice: "{{ url_for('server.saveDevice') }}"
+        }
+      };
+
       PNotify.modules.History.defaults.maxInStack = 3;
       var opts = {
         textTrusted: true,

@@ -6,7 +6,7 @@ $(document).ready(function() {
     $("input#password").val(Params.existedPassword);
   }
 
-  $("#testDatabase").click(function() {
+  $("a#testDatabase").click(function() {
     const data = {
       username: $("input#username").val(),
       password: $("input#password").val()
@@ -17,7 +17,7 @@ $(document).ready(function() {
       data: data,
       async: false,
       success: function(msg) {
-        if (msg == "success") {
+        if (msg == "OK") {
           opts.text = "Connection Success!";
           opts.type = "success";
           PNotify.alert(opts);
@@ -33,7 +33,7 @@ $(document).ready(function() {
     });
   });
 
-  $("#saveDatabase").click(function() {
+  $("a#saveDatabase").click(function() {
     const data = {
       username: $("input#username").val(),
       password: $("input#password").val()
@@ -44,7 +44,7 @@ $(document).ready(function() {
       data: data,
       async: false,
       success: function(msg) {
-        if (msg == "success") {
+        if (msg == "OK") {
           opts.text = "Connection saved Successfully!";
           opts.type = "success";
           PNotify.alert(opts);
@@ -60,19 +60,18 @@ $(document).ready(function() {
     });
   });
 
-  $("#initDatabase").click(function() {
+  $("a#initDatabase").click(function() {
     $.ajax({
       url: Urls.server.initDatabase,
       type: "post",
       async: false,
       success: function(msg) {
-        if (msg == "success") {
+        if (msg == "OK") {
           opts.text = "Initialization Success!";
           opts.type = "success";
           PNotify.alert(opts);
         } else {
-          opts.text =
-            "Initialization Failed!<br /><br />> Error Msg:&nbsp;" + msg;
+          opts.text = "Initialization Failed! Error Msg:<br /><br />> " + msg;
           opts.type = "error";
           PNotify.alert(opts);
         }
@@ -83,7 +82,7 @@ $(document).ready(function() {
     });
   });
 
-  $("#resetDatabase").click(function() {
+  $("a#resetDatabase").click(function() {
     var checkbox = PNotify.error({
       title: "Confirmation Needed",
       text: "Reset the database means delete all existed data. Are you sure?",
@@ -113,12 +112,12 @@ $(document).ready(function() {
         type: "post",
         async: false,
         success: function(msg) {
-          if (msg == "success") {
+          if (msg == "OK") {
             opts.text = "Reset Success!";
             opts.type = "success";
             PNotify.alert(opts);
           } else {
-            opts.text = "Reset Failed!<br /><br />> Error Msg:&nbsp;" + msg;
+            opts.text = "Reset Failed! Error Msg:<br /><br />> " + msg;
             opts.type = "error";
             PNotify.alert(opts);
           }

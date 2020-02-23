@@ -7,6 +7,9 @@
         <h6 class="m-0 font-weight-bold text-primary">Authorize</h6>
       </div>
       <div class="card-body">
+        <p class="lead text-gray-800">
+          Please enter your MySQL username and password.
+        </p>
         <form class="user">
           <div class="form-group">
             <input
@@ -26,14 +29,14 @@
             />
           </div>
           <div class="my-2"></div>
-          <a id="testDatabase" href="#" class="btn btn-info btn-icon-split">
+          <a id="testDatabase" href="#" class="btn btn-info btn-icon-split col-center-block">
             <span class="icon text-white-50">
               <i class="fas fa-info-circle"></i>
             </span>
-            <span class="text">Test Connection</span>
+            <span class="text">Test</span>
           </a>
           <div class="my-2"></div>
-          <a id="saveDatabase" href="#" class="btn btn-success btn-icon-split">
+          <a id="saveDatabase" href="#" class="btn btn-success btn-icon-split col-center-block">
             <span class="icon text-white-50">
               <i class="fas fa-check"></i>
             </span>
@@ -51,14 +54,22 @@
         <h6 class="m-0 font-weight-bold text-primary">Initialize</h6>
       </div>
       <div class="card-body">
-        <a id="initDatabase" href="#" class="btn btn-primary btn-icon-split btn-lg">
+        <a
+          id="initDatabase"
+          href="#"
+          class="btn btn-primary btn-icon-split col-center-block"
+        >
           <span class="icon text-white-50">
             <i class="fas fa-play-circle"></i>
           </span>
-          <span class="text">Initialize Database</span>
+          <span class="text">Init Database</span>
         </a>
         <div class="my-2"></div>
-        <a id="resetDatabase" href="#" class="btn btn-danger btn-icon-split btn-lg">
+        <a
+          id="resetDatabase"
+          href="#"
+          class="btn btn-danger btn-icon-split col-center-block"
+        >
           <span class="icon text-white-50">
             <i class="fas fa-sync"></i>
           </span>
@@ -76,7 +87,6 @@
 ></script>
 <script type="text/javascript">
   var Params = {{ params|tojson }};
-  var Urls = {{ urls|tojson }};
   console.log('Params', Params)
   console.log('Urls', Urls)
 </script>

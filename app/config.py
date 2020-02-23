@@ -8,3 +8,9 @@ class DevelopmentConfig(BaseConfig):
 
 
 config = {'development': DevelopmentConfig, 'default': DevelopmentConfig}
+camera_op = {
+    'photo': '/photo.jpg',
+    'enabletorch': '/enabletorch',
+    'disabletorch': '/disabletorch',
+    'ptz': '/ptz?zoom={zoom}',
+}
