@@ -21,10 +21,10 @@ SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
 -- ----------------------------
--- Table structure for device_info
+-- Table structure for devices_info
 -- ----------------------------
-DROP TABLE IF EXISTS `device_info`;
-CREATE TABLE `device_info` (
+DROP TABLE IF EXISTS `devices_info`;
+CREATE TABLE `devices_info` (
   `id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
   `type` int(11) NOT NULL,
