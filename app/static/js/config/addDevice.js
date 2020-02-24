@@ -84,7 +84,7 @@ $(document).ready(function() {
     });
   });
 
-  $("#zoom").slider({
+  $("input#zoom").slider({
     formatter: function(value) {
       if (value == 0) {
         return;

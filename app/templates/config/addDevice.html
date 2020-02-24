@@ -69,7 +69,7 @@
     </div>
   </div>
   <div id="configDevice_2" class="col-lg-8 hide">
-    <!-- Enter Device Name & Address -->
+    <!-- Calibration -->
     <div class="card shadow mb-4">
       <!-- Card Header - Accordion -->
       <a
@@ -81,77 +81,166 @@
         aria-controls="collapseCard_2"
       >
         <h6 class="m-0 font-weight-bold text-primary">
-          Device Name & Address
+          Calibrate the Pointer
         </h6>
       </a>
       <!-- Card Content - Collapse -->
       <div class="collapse show" id="collapseCard_2">
         <div class="card-body">
-          <p id="collapseLabel_2" class="lead text-gray-800">
-            Please enter new device's name and its network address.
-          </p>
+          <div class="text-center">
+            <img
+              id="calibration"
+              alt="calibration"
+              src="data:image/png;base64,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"
+              width="60%"
+            />
+          </div>
+
+          <div class="row">
+            <!-- Calibration Button -->
+            <div class="col-lg-6">
+              <a
+                id="calibrate"
+                href="javascript:void(0);"
+                class="btn btn-warning btn-icon-split col-center-block"
+              >
+                <span class="icon text-white-50">
+                  <i class="fas fa-tachometer-alt"></i>
+                </span>
+                <span class="text">Calibrate</span>
+              </a>
+              <div class="my-3"></div>
+            </div>
+            <div class="col-lg-6">
+              <a
+                id="videoConfig"
+                href="javascript:void(0);"
+                class="btn btn-info btn-icon-split col-center-block"
+              >
+                <span class="icon text-white-50">
+                  <i class="fas fa-video"></i>
+                </span>
+                <span class="text">Webcam Config</span>
+              </a>
+              <div class="my-3"></div>
+            </div>
+            <form class="user col-lg-12">
+              <p class="text-gray-800 col-center-block">
+                <i class="fas fa-exclamation-circle"></i> Please input the angle
+                of minimum and maximum value.
+              </p>
+              <!-- Angle Range -->
+              <div class="col-lg-12">
+                <div class="form-group row">
+                  <div class="col-sm-6 mb-3 mb-sm-0">
+                    <span>Min Angle</span>
+                    <input
+                      type="text"
+                      class="form-control form-control-user"
+                      id="minAngle"
+                      placeholder="Min Angle (0° - 360°)"
+                    />
+                  </div>
+                  <div class="col-sm-6">
+                    <span>Min Value</span>
+                    <input
+                      type="text"
+                      class="form-control form-control-user"
+                      id="minValue"
+                      placeholder="Min Value"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <!-- Value range -->
+              <div class="col-lg-12">
+                <div class="form-group row">
+                  <div class="col-sm-6 mb-3 mb-sm-0">
+                    <span>Max Angle</span>
+                    <input
+                      type="text"
+                      class="form-control form-control-user"
+                      id="maxAngle"
+                      placeholder="Max Angle (0° - 360°)"
+                    />
+                  </div>
+                  <div class="col-sm-6">
+                    <span>Max Value</span>
+                    <input
+                      type="text"
+                      class="form-control form-control-user"
+                      id="maxValue"
+                      placeholder="Max Value"
+                    />
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-  <div id="configDevice_3" class="col-lg-12 hide">
-    <!-- Enter Device Name & Address -->
-    <div class="card shadow mb-4">
-      <!-- Card Header - Accordion -->
-      <a
-        href="#collapseCard_3"
-        class="d-block card-header py-3"
-        data-toggle="collapse"
-        role="button"
-        aria-expanded="true"
-        aria-controls="collapseCard_3"
-      >
-        <h6 class="m-0 font-weight-bold text-primary">
-          Video Capture Configuration
-        </h6>
-      </a>
-      <!-- Card Content - Collapse -->
-      <div class="collapse show" id="collapseCard_3">
-        <div class="card-body">
-          <p id="collapseLabel_3" class="lead text-gray-800">
-            Please configurate the video format.
-          </p>
+    <div id="configDevice_3" class="col-lg-12 hide">
+      <!-- Webcam Capture Configuration -->
+      <div class="card shadow mb-4">
+        <!-- Card Header - Accordion -->
+        <a
+          href="#collapseCard_3"
+          class="d-block card-header py-3"
+          data-toggle="collapse"
+          role="button"
+          aria-expanded="true"
+          aria-controls="collapseCard_3"
+        >
+          <h6 class="m-0 font-weight-bold text-primary">
+            Webcam Capture Configuration
+          </h6>
+        </a>
+        <!-- Card Content - Collapse -->
+        <div class="collapse show" id="collapseCard_3">
           <div class="card-body">
-            <div class="text-center">
-              <img
-                id="videoPanel"
-                class="video-image"
-                alt="video"
-                src=""
-                width="60%"
-              />
+            <p id="collapseLabel_3" class="lead text-gray-800">
+              Please configurate the video format.
+            </p>
+            <div class="card-body">
+              <div class="text-center">
+                <img
+                  id="videoPanel"
+                  class="video-image"
+                  alt="video"
+                  src=""
+                  width="60%"
+                />
+              </div>
             </div>
+            <p class="text-gray-800">
+              <i class="fas fa-exclamation-circle"></i> Confirm that complete
+              dashboard can be captured.
+            </p>
+            <a
+              id="switchTorch"
+              href="javascript:void(0);"
+              class="btn btn-icon-split"
+            >
+              <span class="icon text-white-50">
+                <i class="fas fa-power-off"></i>
+              </span>
+              <span class="text">Switch the Flashlight</span>
+            </a>
+            &emsp;
+            <input
+              id="zoom"
+              class="col-lg-12"
+              type="text"
+              data-slider-min="0"
+              data-slider-max="100"
+              data-slider-step="1"
+              data-slider-value="0"
+            />
+            &emsp;
+            <span>Current Zoom Size: <span id="zoomShow">0</span>%</span>
           </div>
-          <p class="text-gray-800">
-            <i class="fas fa-exclamation-circle"></i> Confirm that complete
-            dashboard can be captured.
-          </p>
-          <a
-            id="switchTorch"
-            href="javascript:void(0);"
-            class="btn btn-icon-split"
-          >
-            <span class="icon text-white-50">
-              <i class="fas fa-power-off"></i>
-            </span>
-            <span class="text">Switch the Flashlight</span>
-          </a>
-          &emsp;
-          <input
-            id="zoom"
-            type="text"
-            data-slider-min="0"
-            data-slider-max="100"
-            data-slider-step="1"
-            data-slider-value="0"
-          />
-          &emsp;
-          <span>Current Zoom Size: <span id="zoomShow">0</span>%</span>
         </div>
       </div>
     </div>

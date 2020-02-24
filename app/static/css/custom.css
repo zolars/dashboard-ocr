@@ -12,3 +12,7 @@
 .hide {
   display: none;
 }
+
+.continue {
+  white-space: nowrap;
+}
