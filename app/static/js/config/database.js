@@ -17,7 +17,7 @@ $(document).ready(function() {
       data: data,
       async: false,
       success: function(msg) {
-        if (msg == "OK") {
+        if (msg == "Ok") {
           opts.text = "Connection Success!";
           opts.type = "success";
           PNotify.alert(opts);
@@ -44,7 +44,7 @@ $(document).ready(function() {
       data: data,
       async: false,
       success: function(msg) {
-        if (msg == "OK") {
+        if (msg == "Ok") {
           opts.text = "Connection saved Successfully!";
           opts.type = "success";
           PNotify.alert(opts);
@@ -66,7 +66,7 @@ $(document).ready(function() {
       type: "post",
       async: false,
       success: function(msg) {
-        if (msg == "OK") {
+        if (msg == "Ok") {
           opts.text = "Initialization Success!";
           opts.type = "success";
           PNotify.alert(opts);
@@ -112,7 +112,7 @@ $(document).ready(function() {
         type: "post",
         async: false,
         success: function(msg) {
-          if (msg == "OK") {
+          if (msg == "Ok") {
             opts.text = "Reset Success!";
             opts.type = "success";
             PNotify.alert(opts);

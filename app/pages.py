@@ -7,6 +7,7 @@ from flask import (Blueprint, flash, g, redirect, render_template, request,
                    url_for, make_response, send_from_directory)
 from werkzeug.exceptions import abort
 
+from app.config import webcam_op
 from app.db import get_db, close_db
 from app.utils import config_required
 
@@ -47,6 +48,6 @@ def manageDevice():
 @bp.route('/config/addDevice', methods=['GET'])
 @config_required
 def addDevice():
-    params = {}
+    params = {'op': webcam_op}
     dicts = {'title': 'Add Device', 'params': params}
     return render_template('/config/addDevice.html', **dicts)

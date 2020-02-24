@@ -15,6 +15,11 @@
       rel="stylesheet"
       type="text/css"
     />
+     <link
+      href="https://cdn.staticfile.org/bootstrap-slider/10.6.2/css/bootstrap-slider.min.css"
+      rel="stylesheet"
+      type="text/css"
+    />
     <!-- PNotify-CSS -->
     <link
       href="{{ url_for('static', filename='css/pnotify.css') }}"
@@ -119,7 +124,7 @@
         <li class="nav-item">
           <a
             class="nav-link collapsed"
-            href="#"
+            href="javascript:void(0);"
             data-toggle="collapse"
             data-target="#collapseVideoCapture"
             aria-expanded="true"
@@ -193,7 +198,7 @@
             <li class="nav-item dropdown no-arrow d-sm-none">
               <a
                 class="nav-link dropdown-toggle"
-                href="#"
+                href="javascript:void(0);"
                 id="searchDropdown"
                 role="button"
                 data-toggle="dropdown"
@@ -260,12 +265,13 @@
       <i class="fas fa-angle-up"></i>
     </a>
 
-    <!-- Bootstrap core JavaScript -->
+    <!-- JQuery core JavaScript -->
     <script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js"></script>
-    <script src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
-
-    <!-- Core plugin JavaScript -->
     <script src="https://cdn.staticfile.org/jquery-easing/1.4.1/jquery.easing.min.js"></script>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.staticfile.org/bootstrap-slider/10.6.2/bootstrap-slider.min.js"></script>
 
     <!-- PNotify plugin JavaScript -->
     <script
@@ -299,6 +305,7 @@
 
     <!-- Custom scripts for all pages -->
     <script src="{{ url_for('static', filename='js/default.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/base.js') }}"></script>
 
     <script type="text/javascript">
 
@@ -310,11 +317,11 @@
           addDevice: "{{ url_for('pages.addDevice') }}"
         },
         server: {
+          getCalibration: "{{ url_for('server.getCalibration') }}",
           testDatabase: "{{ url_for('server.testDatabase') }}",
           saveDatabase: "{{ url_for('server.saveDatabase') }}",
           initDatabase: "{{ url_for('server.initDatabase') }}",
           resetDatabase: "{{ url_for('server.resetDatabase') }}",
-          testDevice: "{{ url_for('server.testDevice') }}",
           saveDevice: "{{ url_for('server.saveDevice') }}"
         }
       };
