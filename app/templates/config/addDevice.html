@@ -95,23 +95,23 @@
               width="60%"
             />
           </div>
-
+          <div class="my-2"></div>
           <div class="row">
             <!-- Calibration Button -->
-            <div class="col-lg-6">
+            <div class="col-lg-4">
               <a
-                id="calibrate"
+                id="refresh"
                 href="javascript:void(0);"
                 class="btn btn-warning btn-icon-split col-center-block"
               >
                 <span class="icon text-white-50">
                   <i class="fas fa-tachometer-alt"></i>
                 </span>
-                <span class="text">Calibrate</span>
+                <span class="text">Refresh</span>
               </a>
               <div class="my-3"></div>
             </div>
-            <div class="col-lg-6">
+            <div class="col-lg-4">
               <a
                 id="videoConfig"
                 href="javascript:void(0);"
@@ -121,6 +121,19 @@
                   <i class="fas fa-video"></i>
                 </span>
                 <span class="text">Webcam Config</span>
+              </a>
+              <div class="my-3"></div>
+            </div>
+            <div class="col-lg-4">
+              <a
+                id="saveDevice"
+                href="javascript:void(0);"
+                class="btn btn-success btn-icon-split col-center-block"
+              >
+                <span class="icon text-white-50">
+                  <i class="fas fa-check-circle"></i>
+                </span>
+                <span class="text">Save</span>
               </a>
               <div class="my-3"></div>
             </div>
@@ -162,7 +175,7 @@
                       type="text"
                       class="form-control form-control-user"
                       id="maxAngle"
-                      placeholder="Max Angle (0° - 360°)"
+                      placeholder="Please input Max Angle (0° - 360°)"
                     />
                   </div>
                   <div class="col-sm-6">
@@ -171,7 +184,31 @@
                       type="text"
                       class="form-control form-control-user"
                       id="maxValue"
-                      placeholder="Max Value"
+                      placeholder="Please input Max Value"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <!-- Other Info -->
+              <div class="col-lg-12">
+                <div class="form-group row">
+                  <div class="col-sm-6 mb-3 mb-sm-0">
+                    <span>Unit</span>
+                    <input
+                      type="text"
+                      class="form-control form-control-user"
+                      id="unit"
+                      placeholder="Please input the unit"
+                    />
+                  </div>
+                  <div class="col-sm-6">
+                    <span>Description</span>
+                    <input
+                      type="text"
+                      class="form-control form-control-user"
+                      id="description"
+                      placeholder="Please describe the device"
                     />
                   </div>
                 </div>
@@ -181,66 +218,77 @@
         </div>
       </div>
     </div>
-    <div id="configDevice_3" class="col-lg-12 hide">
-      <!-- Webcam Capture Configuration -->
-      <div class="card shadow mb-4">
-        <!-- Card Header - Accordion -->
-        <a
-          href="#collapseCard_3"
-          class="d-block card-header py-3"
-          data-toggle="collapse"
-          role="button"
-          aria-expanded="true"
-          aria-controls="collapseCard_3"
-        >
-          <h6 class="m-0 font-weight-bold text-primary">
-            Webcam Capture Configuration
-          </h6>
-        </a>
-        <!-- Card Content - Collapse -->
-        <div class="collapse show" id="collapseCard_3">
+  </div>
+  <div id="configDevice_3" class="col-lg-12 hide">
+    <!-- Webcam Capture Configuration -->
+    <div class="card shadow mb-4">
+      <!-- Card Header - Accordion -->
+      <a
+        href="#collapseCard_3"
+        class="d-block card-header py-3"
+        data-toggle="collapse"
+        role="button"
+        aria-expanded="true"
+        aria-controls="collapseCard_3"
+      >
+        <h6 class="m-0 font-weight-bold text-primary">
+          Webcam Capture Configuration
+        </h6>
+      </a>
+      <!-- Card Content - Collapse -->
+      <div class="collapse show" id="collapseCard_3">
+        <div class="card-body">
+          <p id="collapseLabel_3" class="lead text-gray-800">
+            Please configurate the video format.
+          </p>
           <div class="card-body">
-            <p id="collapseLabel_3" class="lead text-gray-800">
-              Please configurate the video format.
-            </p>
-            <div class="card-body">
-              <div class="text-center">
-                <img
-                  id="videoPanel"
-                  class="video-image"
-                  alt="video"
-                  src=""
-                  width="60%"
-                />
-              </div>
+            <div class="text-center">
+              <img
+                id="videoPanel"
+                class="video-image"
+                alt="video"
+                src=""
+                width="60%"
+              />
             </div>
-            <p class="text-gray-800">
-              <i class="fas fa-exclamation-circle"></i> Confirm that complete
-              dashboard can be captured.
-            </p>
-            <a
-              id="switchTorch"
-              href="javascript:void(0);"
-              class="btn btn-icon-split"
-            >
-              <span class="icon text-white-50">
-                <i class="fas fa-power-off"></i>
-              </span>
-              <span class="text">Switch the Flashlight</span>
-            </a>
-            &emsp;
-            <input
-              id="zoom"
-              class="col-lg-12"
-              type="text"
-              data-slider-min="0"
-              data-slider-max="100"
-              data-slider-step="1"
-              data-slider-value="0"
-            />
-            &emsp;
-            <span>Current Zoom Size: <span id="zoomShow">0</span>%</span>
           </div>
+          <p class="text-gray-800">
+            <i class="fas fa-exclamation-circle"></i> Confirm that complete
+            dashboard can be captured.
+          </p>
+          <a
+            id="switchTorch"
+            href="javascript:void(0);"
+            class="btn btn-icon-split"
+          >
+            <span class="icon text-white-50">
+              <i class="fas fa-power-off"></i>
+            </span>
+            <span class="text">Switch the Flashlight</span>
+          </a>
+          &emsp;
+          <input
+            id="zoom"
+            class="col-lg-12"
+            type="text"
+            data-slider-min="0"
+            data-slider-max="100"
+            data-slider-step="1"
+            data-slider-value="0"
+          />
+          &emsp;
+          <span>Current Zoom Size: <span id="zoomShow">0</span>%</span>
+          <div class="my-2"></div>
+          <a
+            id="closeVideoConfig"
+            href="javascript:void(0);"
+            class="btn btn-success btn-icon-split"
+          >
+            <span class="icon text-white-50">
+              <i class="fas fa-check-circle"></i>
+            </span>
+            <span class="text">OK</span>
+          </a>
         </div>
       </div>
     </div>
@@ -254,8 +302,6 @@
 ></script>
 <script type="text/javascript">
   var Params = {{ params|tojson }};
-  console.log('Params', Params)
-  console.log('Urls', Urls)
 </script>
 
 {% endblock %}

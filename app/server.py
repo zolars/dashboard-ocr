@@ -8,19 +8,43 @@ from flask import (Blueprint, flash, g, redirect, render_template, request,
                    url_for, make_response, send_from_directory)
 from werkzeug.exceptions import abort
 
+from app.config import webcam_op
 from app.db import get_db, close_db
-from app.utils import config_required
 from app import utils
+from app import detect
 
 bp = Blueprint('server', __name__)
 
 
-@bp.route('/getCalibration', methods=['POST'])
-def getCalibration():
+@bp.route('/data', methods=['GET'])
+def data():
+    return {'result': 'Ok'}
+
+
+@bp.route('/calibrate', methods=['POST'])
+def calibrate():
+    from io import BytesIO
+
     try:
-        return 'Ok'
+        deviceName = request.form["deviceName"]
+        deviceAddress = request.form["deviceAddress"]
+        response = requests.get(deviceAddress + webcam_op['photo'])
+        img = BytesIO(response.content)
+        detect.calibrate(img)
+
+        return "Ok"
     except Exception as e:
-        return str(e)
+        logging.debug(e)
+        abort(500)
+
+
+@bp.route('/getCalibrate', methods=['get'])
+def getCalibrate():
+    with open(os.path.join("out", "clock_0_calibrate.jpg"), "rb") as f:
+        img = f.read()
+        response = make_response(img)
+        response.headers['Content-Type'] = 'image/png'
+        return response
 
 
 @bp.route('/config/testDatabase', methods=['POST'])
@@ -81,7 +105,33 @@ def resetDatabase():
 
 @bp.route('/config/saveDevice', methods=['POST'])
 def saveDevice():
-    deviceName = request.form['deviceName']
-    deviceAddress = request.form['deviceAddress']
+    name = request.form['deviceName']
+    address = request.form['deviceAddress']
+    minAngle = request.form["minAngle"]
+    maxAngle = request.form["maxAngle"]
+    minValue = request.form["minValue"]
+    maxValue = request.form["maxValue"]
+    try:
+        unit = "'" + request.form["unit"] + "'"
+    except:
+        unit = "NULL"
+    try:
+        description = "'" + request.form["description"] + "'"
+    except:
+        description = "NULL"
+
+    sql = "INSERT INTO `device_info` (`name`, `address`, `minAngle`, `maxAngle`, `minValue`, `maxValue`, `unit`, `description`) VALUES ('{name}', '{address}', {minAngle}, {maxAngle}, {minValue}, {maxValue}, {unit}, {description})".format(
+        name=name,
+        address=address,
+        minAngle=minAngle,
+        maxAngle=maxAngle,
+        minValue=minValue,
+        maxValue=maxValue,
+        unit=unit,
+        description=description)
+    db = get_db()
+    db.execute(sql)
+    db.commit()
+    close_db()
 
     return 'Ok'

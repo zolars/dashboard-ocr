@@ -19,11 +19,11 @@ $(document).ready(function() {
       type: "get",
       data: "",
       dataType: "json",
-      async: false,
+      async: true,
+      timeout: 2000,
       success: function(response) {
-        opts.text = "Connection Success!";
-        opts.type = "success";
-        PNotify.alert(opts);
+        flash("Connection Success!", "success");
+
         $("div#configDevice_2").css("display", "block");
         $("a#resetDevice").css("display", "table");
         $("a#testDevice").css("display", "none");
@@ -32,21 +32,67 @@ $(document).ready(function() {
         $("p#collapseLabel_1").text(
           "New device's name and its network address is as below. "
         );
-        // $("img#videoPanel").attr("src", data.deviceAddress + Params.op.video);
-        // console.log(response.curvals.torch);
-        // if (response.curvals.torch == "off") {
-        //   $("a#switchTorch").addClass("btn-success");
-        // } else {
-        //   $("a#switchTorch").addClass("btn-danger");
-        // }
+        if (response.curvals.torch == "off") {
+          $("a#switchTorch").addClass("btn-warning");
+        } else {
+          $("a#switchTorch").addClass("btn-danger");
+        }
       },
       error: function(err) {
-        opts.text = "Connection Failed! Error Msg:<br /><br />> " + err;
-        opts.type = "error";
-        PNotify.alert(opts);
+        flash(
+          "Connection Failed! Error Msg:<br /><br />> " + err.statusText,
+          "error"
+        );
         console.log(err);
       }
     });
+  });
+
+  $("a#refresh").click(function() {
+    const data = {
+      deviceName: $("input#deviceName").val(),
+      deviceAddress: $("input#deviceAddress").val()
+    };
+    $("div#floatLayer").show();
+    $.ajax({
+      url: Urls.server.calibrate,
+      type: "post",
+      data: data,
+      async: false,
+      success: function(msg) {
+        if (msg == "Ok") {
+          img = $("img#calibration");
+          src = Urls.server.getCalibrate;
+          img.attr("src", src + "?r=" + new Date().getTime());
+          $("div#floatLayer").hide();
+
+          flash("Refresh Success!", "success");
+        }
+      },
+      error: function(err) {
+        $("div#floatLayer").hide();
+
+        flash(
+          "Refresh Failed! Error Msg:<br /><br />> " + err.statusText,
+          "error"
+        );
+        console.log(err);
+      }
+    });
+  });
+
+  $("a#videoConfig").click(function() {
+    const data = {
+      deviceName: $("input#deviceName").val(),
+      deviceAddress: $("input#deviceAddress").val()
+    };
+    $("div#configDevice_3").css("display", "block");
+    $("img#videoPanel").attr("src", data.deviceAddress + Params.op.video);
+  });
+
+  $("a#closeVideoConfig").click(function() {
+    $("div#configDevice_3").css("display", "none");
+    $("img#videoPanel").attr("src", "");
   });
 
   $("a#switchTorch").click(function() {
@@ -55,30 +101,27 @@ $(document).ready(function() {
       deviceAddress: $("input#deviceAddress").val()
     };
     let url;
-    if ($("a#switchTorch").hasClass("btn-success")) {
+    if ($("a#switchTorch").hasClass("btn-warning")) {
       url = data.deviceAddress + Params.op.enabletorch;
-      $("a#switchTorch").removeClass("btn-success");
+      $("a#switchTorch").removeClass("btn-warning");
       $("a#switchTorch").addClass("btn-danger");
     } else {
       url = data.deviceAddress + Params.op.disabletorch;
       $("a#switchTorch").removeClass("btn-danger");
-      $("a#switchTorch").addClass("btn-success");
+      $("a#switchTorch").addClass("btn-warning");
     }
     $.ajax({
       url: url,
       type: "get",
-      data: "",
-      dataType: "text",
-      async: false,
+      async: true,
       success: function() {
-        opts.text = "Operation Success!";
-        opts.type = "success";
-        PNotify.alert(opts);
+        flash("Operation Success!", "success");
       },
       error: function(err) {
-        opts.text = "Operation Failed! Error Msg:<br /><br />> " + err;
-        opts.type = "error";
-        PNotify.alert(opts);
+        flash(
+          "Operation Failed! Error Msg:<br /><br />> " + err.statusText,
+          "error"
+        );
         console.log(err);
       }
     });
@@ -98,7 +141,7 @@ $(document).ready(function() {
         type: "get",
         data: "",
         dataType: "text",
-        async: false,
+        async: true,
         success: function() {
           $("span#zoomShow").text(value);
         },
@@ -112,7 +155,43 @@ $(document).ready(function() {
   $("a#saveDevice").click(function() {
     const data = {
       deviceName: $("input#deviceName").val(),
-      deviceAddress: $("input#deviceAddress").val()
+      deviceAddress: $("input#deviceAddress").val(),
+      minAngle: parseInt($("input#minAngle").val()),
+      maxAngle: parseInt($("input#maxAngle").val()),
+      minValue: parseInt($("input#minValue").val()),
+      maxValue: parseInt($("input#maxValue").val()),
+      unit: $("input#unit").val(),
+      description: $("input#description").val()
     };
+
+    if (
+      data.minAngle >= 0 &&
+      data.minAngle <= 360 &&
+      data.maxAngle >= 0 &&
+      data.maxAngle <= 360 &&
+      data.minAngle < data.maxAngle &&
+      data.minValue < data.maxValue
+    ) {
+      console.log(data);
+      $.ajax({
+        url: Urls.server.saveDevice,
+        type: "post",
+        data: data,
+        async: false,
+        success: function() {
+          flash("Device saved Successfully!", "success");
+          location.href = Urls.pages.manageDevice;
+        },
+        error: function(err) {
+          flash(
+            "Device saved Failed! Error Msg:<br /><br />> " + err.statusText,
+            "error"
+          );
+          console.log(err);
+        }
+      });
+    } else {
+      flash("Your input is incorrect. Please check again.", "error");
+    }
   });
 });

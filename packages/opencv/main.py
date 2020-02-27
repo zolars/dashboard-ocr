@@ -95,12 +95,12 @@ def draw_calibration(img, x, y, r):
         for j in range(0, 2):
             if (j % 2 == 0):
                 p2[i][j] = x + r * np.cos(separation * i * math.pi / 180)
-                p_text[i][j] = x - text_offset_x + 1.2 * r * np.cos(
+                p_text[i][j] = x - text_offset_x + 1.1 * r * np.cos(
                     (separation) * (i + 9) * math.pi / 180
                 )  # point for text labels, i+9 rotates the labels by 90 degrees
             else:
                 p2[i][j] = y + r * np.sin(separation * i * math.pi / 180)
-                p_text[i][j] = y + text_offset_y + 1.2 * r * np.sin(
+                p_text[i][j] = y + text_offset_y + 1.1 * r * np.sin(
                     (separation) * (i + 9) * math.pi / 180
                 )  # point for text labels, i+9 rotates the labels by 90 degrees
 
@@ -110,7 +110,8 @@ def draw_calibration(img, x, y, r):
                  (int(p2[i][0]), int(p2[i][1])), (0, 255, 0), 2)
         cv2.putText(img, '%s' % (int(i * separation)),
                     (int(p_text[i][0]), int(p_text[i][1])),
-                    cv2.FONT_HERSHEY_SIMPLEX, 0.3, (0, 0, 0), 1, cv2.LINE_AA)
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 0, 0), 1, cv2.LINE_AA)
+    return img
 
 
 def get_current_value(img, min_angle, max_angle, min_value, max_value, x, y,

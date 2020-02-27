@@ -15,16 +15,12 @@ $(document).ready(function() {
       url: Urls.server.testDatabase,
       type: "post",
       data: data,
-      async: false,
+      async: true,
       success: function(msg) {
         if (msg == "Ok") {
-          opts.text = "Connection Success!";
-          opts.type = "success";
-          PNotify.alert(opts);
+          flash("Connection Success!", "success");
         } else if (msg == "error") {
-          opts.text = "Connection Failed!";
-          opts.type = "error";
-          PNotify.alert(opts);
+          flash("Connection Failed!", "error");
         }
       },
       error: function(err) {
@@ -42,16 +38,12 @@ $(document).ready(function() {
       url: Urls.server.saveDatabase,
       type: "post",
       data: data,
-      async: false,
+      async: true,
       success: function(msg) {
         if (msg == "Ok") {
-          opts.text = "Connection saved Successfully!";
-          opts.type = "success";
-          PNotify.alert(opts);
+          flash("Connection saved Successfully!", "success");
         } else if (msg == "error") {
-          opts.text = "Saving Connection Failed! Please check again.";
-          opts.type = "error";
-          PNotify.alert(opts);
+          flash("Saving Connection Failed! Please check again.", "error");
         }
       },
       error: function(err) {
@@ -64,16 +56,12 @@ $(document).ready(function() {
     $.ajax({
       url: Urls.server.initDatabase,
       type: "post",
-      async: false,
+      async: true,
       success: function(msg) {
         if (msg == "Ok") {
-          opts.text = "Initialization Success!";
-          opts.type = "success";
-          PNotify.alert(opts);
+          flash("Initialization Success!", "success");
         } else {
-          opts.text = "Initialization Failed! Error Msg:<br /><br />> " + msg;
-          opts.type = "error";
-          PNotify.alert(opts);
+          flash("Initialization Failed! Error Msg:<br /><br />" + msg, "error");
         }
       },
       error: function(err) {
@@ -110,16 +98,12 @@ $(document).ready(function() {
       $.ajax({
         url: Urls.server.resetDatabase,
         type: "post",
-        async: false,
+        async: true,
         success: function(msg) {
           if (msg == "Ok") {
-            opts.text = "Reset Success!";
-            opts.type = "success";
-            PNotify.alert(opts);
+            flash("Reset Success!", "success");
           } else {
-            opts.text = "Reset Failed! Error Msg:<br /><br />> " + msg;
-            opts.type = "error";
-            PNotify.alert(opts);
+            flash("Reset Failed! Error Msg:<br /><br />" + msg, "error");
           }
         },
         error: function(err) {

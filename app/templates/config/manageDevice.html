@@ -1,4 +1,91 @@
-{% extends 'base.html' %} 
-{% block pageContent %}
+{% extends 'base.html' %} {% block pageContent %}
+
+<div class="row">
+  {% for item in params.deviceItems %}
+  <div class="col-lg-4">
+    <!-- Device Card -->
+    <div class="card shadow mb-4">
+      <!-- Card Header - Dropdown -->
+      <div
+        class="card-header py-3 d-flex flex-row align-items-center justify-content-between"
+      >
+        <h6 class="m-0 font-weight-bold text-primary">{{ item.name }}</h6>
+        <div class="dropdown no-arrow">
+          <a
+            class="dropdown-toggle"
+            href="#"
+            role="button"
+            id="dropdownMenuLink"
+            data-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >
+            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+          </a>
+          <div
+            class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+            aria-labelledby="dropdownMenuLink"
+          >
+            <a id="previewFor{{ item.id }}" class="dropdown-item" href="#"
+              ><i class="fas fa-eye"></i> Preview</a
+            >
+            <a id="editFor{{ item.id }}" class="dropdown-item" href="#"
+              ><i class="fas fa-edit"></i> Edit</a
+            >
+            <div class="dropdown-divider"></div>
+            <a id="deleteFor{{ item.id }}" class="dropdown-item" href="#"
+              ><i class="fas fa-trash-alt"></i> Delete</a
+            >
+          </div>
+        </div>
+      </div>
+      <!-- Card Body -->
+      <div class="card-body">
+        <div class="row">
+          <div class="col-lg-12">
+            <p class="lead text-gray-800">
+              Address : <code>{{ item.address }}</code>
+            </p>
+          </div>
+          <div class="col-lg-6">
+            <p class="lead text-gray-800">
+              Min Angle : <code>{{ item.minAngle }}</code>
+            </p>
+          </div>
+          <div class="col-lg-6">
+            <p class="lead text-gray-800">
+              Max Angle : <code>{{ item.maxAngle }}</code>
+            </p>
+          </div>
+          <div class="col-lg-6">
+            <p class="lead text-gray-800">
+              Min Value : <code>{{ item.minValue }}</code>
+            </p>
+          </div>
+          <div class="col-lg-6">
+            <p class="lead text-gray-800">
+              Max Value : <code>{{ item.maxValue }}</code>
+            </p>
+          </div>
+          <div class="col-lg-12">
+            <p class="lead text-gray-800">
+              Unit : <code>{{ item.unit }}</code>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+{% endblock %}{% block js %}
+<script
+  src="{{ url_for('static', filename='js/config/manageDevice.js') }}"
+  type="text/javascript"
+></script>
+<script type="text/javascript">
+  var Params = {{ params|tojson }};
+</script>
 
 {% endblock %}

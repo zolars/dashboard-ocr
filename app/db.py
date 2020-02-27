@@ -34,9 +34,11 @@ class MySQL:
         self._cur = self._conn.cursor()
 
     def execute(self, sql):
+        logging.info(sql)
         self._cur.execute(sql)
 
     def fetchall(self, sql):
+        logging.info(sql)
         df = pd.read_sql(sql, con=self._conn)
         return df
 
@@ -44,16 +46,12 @@ class MySQL:
         self._conn.commit()
 
     def create(self):
-        logging.info("Start to initialize the database...")
-
         with current_app.open_resource('schema.sql') as f:
             for sql in f.read().decode('utf8').split(';'):
                 self._cur.execute(sql)
                 self._conn.commit()
 
     def clear(self):
-        logging.info("Start to delete and clear the database...")
-
         try:
             self._cur.execute('DROP DATABASE IF EXISTS `dashboard`;')
             self._conn.commit()

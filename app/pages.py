@@ -17,8 +17,23 @@ bp = Blueprint('pages', __name__)
 @bp.route('/', methods=['GET'])
 @config_required
 def dashboard():
-    flash('dashboard', 'notice')
     params = {}
+
+    sql = 'SELECT * FROM `device_info` ORDER BY id'
+    db = get_db()
+    results = db.fetchall(sql)
+    close_db()
+
+    items = []
+    for _, row in results.iterrows():
+        items.append({
+            'id': row['id'],
+            'name': row['name'],
+            'unit': row['unit'],
+        })
+
+    params['deviceItems'] = items
+
     dicts = {'title': 'Dashboard', 'params': params}
     return render_template('/dashboard.html', **dicts)
 
@@ -41,6 +56,28 @@ def database():
 @config_required
 def manageDevice():
     params = {}
+
+    sql = 'SELECT * FROM `device_info` ORDER BY id'
+    db = get_db()
+    results = db.fetchall(sql)
+    close_db()
+
+    items = []
+    for _, row in results.iterrows():
+        items.append({
+            'id': row['id'],
+            'name': row['name'],
+            'address': row['address'],
+            'minAngle': row['minAngle'],
+            'maxAngle': row['maxAngle'],
+            'minValue': row['minValue'],
+            'maxValue': row['maxValue'],
+            'unit': row['unit'],
+            'description': row['description']
+        })
+
+    params['deviceItems'] = items
+
     dicts = {'title': 'Manage Device', 'params': params}
     return render_template('/config/manageDevice.html', **dicts)
 
