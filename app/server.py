@@ -4,6 +4,9 @@ import logging
 import functools
 import requests
 
+import pandas as pd
+from pyecharts.charts import Line
+
 from flask import (Blueprint, flash, g, redirect, render_template, request,
                    url_for, make_response, send_from_directory)
 from werkzeug.exceptions import abort
@@ -16,9 +19,28 @@ from app import detect
 bp = Blueprint('server', __name__)
 
 
-@bp.route('/data', methods=['GET'])
+def line_smooth(date, value) -> Line:
+    c = (Line().add_xaxis(date).add_yaxis("Value", value, is_smooth=True))
+    return c
+
+
+@bp.route('/data', methods=['POST'])
 def data():
-    return {'result': 'Ok'}
+    device_id = request.form['id']
+    db = get_db()
+    sql = 'SELECT * FROM `records` WHERE `device_id`={device_id} ORDER BY id'.format(
+        device_id=device_id)
+    result = db.fetchall(sql)
+
+    date = []
+    value = []
+    for _, row in result.iterrows():
+        date.append("{:%Y-%m-%d %H:%M:%S}".format(row['time'].to_pydatetime()))
+        value.append(row['value'])
+    close_db()
+
+    c = line_smooth(date[-10:], value[-10:])
+    return c.dump_options_with_quotes()
 
 
 @bp.route('/calibrate', methods=['POST'])

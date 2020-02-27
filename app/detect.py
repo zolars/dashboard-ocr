@@ -1,6 +1,9 @@
 import os
 import logging
+import requests
 import datetime as dt
+from io import BytesIO
+from multiprocessing import Process, Pool
 
 import cv2
 from PIL import Image
@@ -8,8 +11,11 @@ import numpy as np
 from packages.yolov3 import main as yolov3
 from packages.opencv import main as opencv
 
+from app.config import webcam_op
+from app.db import get_db, close_db
 
-def runYolo(img):
+
+def runYOLO(img):
     root = os.getcwd()
 
     os.chdir("./packages/yolov3/")
@@ -24,7 +30,7 @@ def runYolo(img):
 
 def calibrate(img):
     img = Image.open(img).convert("RGB")
-    _, cropped = runYolo(img)
+    _, cropped = runYOLO(img)
 
     img_output = None
     # clock images collection
@@ -58,10 +64,7 @@ def calibrate(img):
 
 def ocr(img, min_angle, max_angle, min_value, max_value, x, y, r):
     img = Image.open(img).convert("RGB")
-    _, cropped = runYolo(img)
-
-    img = Image.open(img).convert("RGB")
-    _, cropped = runYolo(img)
+    _, cropped = runYOLO(img)
 
     img_output = None
     # clock images collection

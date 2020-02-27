@@ -14,7 +14,7 @@ USE dashboard;
  Target Server Version : 50562
  File Encoding         : 65001
 
- Date: 27/02/2020 14:13:14
+ Date: 27/02/2020 21:41:04
 */
 
 SET NAMES utf8mb4;
@@ -38,6 +38,18 @@ CREATE TABLE `device_info` (
   `y` int(11) NOT NULL,
   `r` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for records
+-- ----------------------------
+DROP TABLE IF EXISTS `records`;
+CREATE TABLE `records` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `device_id` int(11) NOT NULL,
+  `value` float(11,3) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 SET FOREIGN_KEY_CHECKS = 1;

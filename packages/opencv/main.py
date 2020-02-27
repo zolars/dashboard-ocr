@@ -144,7 +144,7 @@ def get_current_value(img, min_angle, max_angle, min_value, max_value, x, y,
     dst2 = cv2.GaussianBlur(dst2, (5, 5), 0)
 
     # for testing, show image after thresholding
-    cv2.imwrite('./out/%s-tempdst2.%s' % (0, 'jpg'), dst2)
+    # cv2.imwrite('./out/%s-tempdst2.%s' % (0, 'jpg'), dst2)
 
     # find lines
     minLineLength = 10
@@ -159,10 +159,10 @@ def get_current_value(img, min_angle, max_angle, min_value, max_value, x, y,
     )  # rho is set to 3 to detect more lines, easier to get more then filter them out later
 
     # for testing purposes, show all found lines
-    for i in range(0, len(lines)):
-        for x1, y1, x2, y2 in lines[i]:
-            cv2.line(img, (x1, y1), (x2, y2), (0, 255, 0), 2)
-            cv2.imwrite('./out/%s-lines-test.%s' % (0, 'jpg'), img)
+    # for i in range(0, len(lines)):
+    #     for x1, y1, x2, y2 in lines[i]:
+    #         cv2.line(img, (x1, y1), (x2, y2), (0, 255, 0), 2)
+    #         cv2.imwrite('./out/%s-lines-test.%s' % (0, 'jpg'), img)
 
     # remove all lines outside a given radius
     final_line_list = []
@@ -202,13 +202,12 @@ def get_current_value(img, min_angle, max_angle, min_value, max_value, x, y,
         if dist_2_pts(x1, y1, x2, y2) > max_length:
             xx1, yy1, xx2, yy2 = x1, y1, x2, y2
             max_length = dist_2_pts(x1, y1, x2, y2)
-        cv2.line(img, (x1, y1), (x2, y2), (0, 0, 255), 2)
-        cv2.imwrite('./out/%s-lines-filter.%s' % (0, 'jpg'), img)
+        # cv2.line(img, (x1, y1), (x2, y2), (0, 0, 255), 2)
 
     # assumes the longest line is the best one
     x1, y1, x2, y2 = xx1, yy1, xx2, yy2
-    cv2.line(img, (x1, y1), (x2, y2), (255, 0, 0), 2)
-    cv2.imwrite('./out/%s-lines-filter.%s' % (0, 'jpg'), img)
+    # cv2.line(img, (x1, y1), (x2, y2), (255, 0, 0), 2)
+    # cv2.imwrite('./out/%s-lines-filter.%s' % (0, 'jpg'), img)
 
     # find the farthest point from the center to be what is used to determine the angle
     dist_pt_0 = dist_2_pts(x, y, x1, y1)

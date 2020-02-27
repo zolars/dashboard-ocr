@@ -1,6 +1,10 @@
 {% extends 'base.html' %} {% block pageContent %}
 <div class="row">
-  {% for item in params.deviceItems %}
+  {% if params.deviceItems == [] %}
+  <p class="col-lg-12 lead text-gray-800">
+    Please add at least one device first : )
+  </p>
+  {% endif %} {% for item in params.deviceItems %}
   <div class="col-lg-12">
     <!-- Chart Card -->
     <div class="card shadow mb-4">

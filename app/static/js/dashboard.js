@@ -19,13 +19,12 @@ $(document).ready(function() {
     for (const [key, value] of Object.entries(items)) {
       let data = { id: value.id };
       $.ajax({
-        type: "GET",
+        type: "POST",
         url: Urls.server.data,
         data: data,
         dataType: "json",
         success: function(result) {
-          console.log(result);
-          // chart.setOption(result["chart"]);
+          charts[value.id].setOption(result);
         },
         error: function(err) {
           console.log(err.textStatus);
@@ -36,6 +35,6 @@ $(document).ready(function() {
 
   $(function() {
     fetchData(false);
-    setInterval(fetchData, 5000);
+    setInterval(fetchData, 2000);
   });
 });

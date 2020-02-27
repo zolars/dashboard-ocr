@@ -8,6 +8,7 @@ import io
 import os
 import sys
 import time
+import logging
 import datetime
 import argparse
 
@@ -67,7 +68,7 @@ def detect(img_raw):
                         help="path to checkpoint model")
     parser.add_argument("run", type=str, help="default flask instruction")
     opt = parser.parse_args()
-    print(opt)
+    logging.info(opt)
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -101,7 +102,7 @@ def detect(img_raw):
     # Configure input
     input_img = Variable(input_img.type(Tensor))
 
-    print("\nPerforming object detections:")
+    logging.info("Performing object detections:")
     prev_time = time.time()
 
     # Get detections
@@ -114,7 +115,7 @@ def detect(img_raw):
     current_time = time.time()
     inference_time = datetime.timedelta(seconds=current_time - prev_time)
     prev_time = current_time
-    print("\t+ Inference Time: %s" % (inference_time))
+    logging.info("\t+ Inference Time: %s" % (inference_time))
 
     # Bounding-box colors
     cmap = plt.get_cmap("tab20b")
@@ -136,8 +137,8 @@ def detect(img_raw):
         bbox_colors = random.sample(colors, n_cls_preds)
         for x1, y1, x2, y2, conf, cls_conf, cls_pred in detections:
 
-            print("\t+ Label: %s, Conf: %.5f" %
-                  (classes[int(cls_pred)], cls_conf.item()))
+            logging.info("\t+ Label: %s, Conf: %.5f" %
+                         (classes[int(cls_pred)], cls_conf.item()))
 
             box_w = x2 - x1
             box_h = y2 - y1
