@@ -1,4 +1,5 @@
 $(document).ready(function() {
+  let calibrateResult = false;
   if (Params.deviceName != null) {
     $("input#deviceName").val(Params.deviceName);
   }
@@ -58,16 +59,17 @@ $(document).ready(function() {
       url: Urls.server.calibrate,
       type: "post",
       data: data,
+      dataType: "json",
       async: false,
-      success: function(msg) {
-        if (msg == "Ok") {
-          img = $("img#calibration");
-          src = Urls.server.getCalibrate;
-          img.attr("src", src + "?r=" + new Date().getTime());
-          $("div#floatLayer").hide();
+      success: function(result) {
+        img = $("img#calibration");
+        src = Urls.server.getCalibrate;
+        img.attr("src", src + "?r=" + new Date().getTime());
+        $("div#floatLayer").hide();
+        console.log(result);
+        calibrateResult = result;
 
-          flash("Refresh Success!", "success");
-        }
+        flash("Refresh Success!", "success");
       },
       error: function(err) {
         $("div#floatLayer").hide();
@@ -153,6 +155,10 @@ $(document).ready(function() {
   });
 
   $("a#saveDevice").click(function() {
+    if (!calibrateResult) {
+      flash("Please refresh the calibration once", "error");
+      return;
+    }
     const data = {
       deviceName: $("input#deviceName").val(),
       deviceAddress: $("input#deviceAddress").val(),
@@ -161,7 +167,10 @@ $(document).ready(function() {
       minValue: parseInt($("input#minValue").val()),
       maxValue: parseInt($("input#maxValue").val()),
       unit: $("input#unit").val(),
-      description: $("input#description").val()
+      description: $("input#description").val(),
+      x: calibrateResult.x,
+      y: calibrateResult.y,
+      r: calibrateResult.r
     };
 
     if (

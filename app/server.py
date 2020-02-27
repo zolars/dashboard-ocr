@@ -30,12 +30,12 @@ def calibrate():
         deviceAddress = request.form["deviceAddress"]
         response = requests.get(deviceAddress + webcam_op['photo'])
         img = BytesIO(response.content)
-        detect.calibrate(img)
-
-        return "Ok"
+        x, y, r = detect.calibrate(img)
     except Exception as e:
         logging.debug(e)
         abort(500)
+
+    return {'x': x, 'y': y, 'r': r}
 
 
 @bp.route('/getCalibrate', methods=['get'])
@@ -111,6 +111,9 @@ def saveDevice():
     maxAngle = request.form["maxAngle"]
     minValue = request.form["minValue"]
     maxValue = request.form["maxValue"]
+    x = request.form["x"]
+    y = request.form["y"]
+    r = request.form["r"]
     try:
         unit = "'" + request.form["unit"] + "'"
     except:
@@ -120,7 +123,7 @@ def saveDevice():
     except:
         description = "NULL"
 
-    sql = "INSERT INTO `device_info` (`name`, `address`, `minAngle`, `maxAngle`, `minValue`, `maxValue`, `unit`, `description`) VALUES ('{name}', '{address}', {minAngle}, {maxAngle}, {minValue}, {maxValue}, {unit}, {description})".format(
+    sql = "INSERT INTO `device_info` (`name`, `address`, `minAngle`, `maxAngle`, `minValue`, `maxValue`, `unit`, `description`, `x`, `y`, `r`) VALUES ('{name}', '{address}', {minAngle}, {maxAngle}, {minValue}, {maxValue}, {unit}, {description}, {x}, {y}, {r})".format(
         name=name,
         address=address,
         minAngle=minAngle,
@@ -128,7 +131,10 @@ def saveDevice():
         minValue=minValue,
         maxValue=maxValue,
         unit=unit,
-        description=description)
+        description=description,
+        x=x,
+        y=y,
+        r=r)
     db = get_db()
     db.execute(sql)
     db.commit()

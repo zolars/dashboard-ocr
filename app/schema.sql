@@ -34,6 +34,9 @@ CREATE TABLE `device_info` (
   `maxValue` int(11) NOT NULL,
   `unit` varchar(255) DEFAULT NULL,
   `description` varchar(255) DEFAULT NULL,
+  `x` int(11) NOT NULL,
+  `y` int(11) NOT NULL,
+  `r` int(11) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
