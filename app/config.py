@@ -9,7 +9,7 @@ class DevelopmentConfig(BaseConfig):
 
 config = {'development': DevelopmentConfig, 'default': DevelopmentConfig}
 webcam_op = {
-    'photo': '/photo.jpg',
+    'photo': '/photoaf.jpg',
     'video': '/video',
     'enabletorch': '/enabletorch',
     'disabletorch': '/disabletorch',

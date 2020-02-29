@@ -39,11 +39,11 @@ class MySQL:
         self._cur = self._conn.cursor()
 
     def execute(self, sql):
-        print(sql)
+        logging.info(sql)
         self._cur.execute(sql)
 
     def fetchall(self, sql):
-        print(sql)
+        logging.info(sql)
         df = pd.read_sql(sql, con=self._conn)
         return df
 
@@ -56,11 +56,10 @@ class MySQL:
 
 def runYOLO(img):
     root = os.getcwd()
-    print(root)
     os.chdir("./packages/yolov3/")
 
     _, cropped = yolov3.detect(img)
-    print(cropped)
+    logging.info(cropped)
 
     os.chdir(root)
 
@@ -77,14 +76,14 @@ def calibrate(img):
         count = 0
         for i in cropped['clock']:
             img_crop = img.crop((i[0] - 20, i[1] - 20, i[2] + 20, i[3] + 20))
-            # img_crop.save("./out/clock_" + str(count) + ".jpg")
+            # img_crop.save("./out/clock_" + str(count) + "_cropped.jpg")
 
             img_input = cv2.cvtColor(np.asarray(img_crop), cv2.COLOR_RGB2BGR)
 
             x, y, r = opencv.calibrate(img_input)
             img_output = opencv.draw_calibration(img_input, x, y, r)
-            cv2.imwrite("./out/clock_" + str(count) + "_calibrate.jpg",
-                        img_output)
+            # cv2.imwrite("./out/clock_" + str(count) + "_calibrate.jpg",
+            #             img_output)
 
             count += 1
 
@@ -103,10 +102,10 @@ def calibrate(img):
 
 def ocr(img, min_angle, max_angle, min_value, max_value, x, y, r):
     img = Image.open(img).convert("RGB")
-    print("    Run YOLO...")
+    logging.info("Run YOLO...")
     _, cropped = runYOLO(img)
 
-    print("    Run OpenCV...")
+    logging.info("Run OpenCV...")
     img_output = None
     # clock images collection
     if 'clock' in cropped:
@@ -123,7 +122,7 @@ def ocr(img, min_angle, max_angle, min_value, max_value, x, y, r):
 
 def run(item):
 
-    print("    Requests Get...")
+    logging.info("Requests Get...")
     response = requests.get(item['address'] + webcam_op['photo'])
     img = BytesIO(response.content)
     result = ocr(img, item['minAngle'], item['maxAngle'], item['minValue'],
@@ -133,7 +132,13 @@ def run(item):
 
 if __name__ == '__main__':
 
-    print("OCR Server is beginning...")
+    logging.basicConfig(filename='./log/ocr.log',
+                        filemode="a+",
+                        format="%(asctime)s %(levelname)s : %(message)s",
+                        datefmt="%Y-%m-%d %H:%M:%S",
+                        level=logging.DEBUG)
+
+    logging.info("OCR Server is beginning...")
 
     with open(os.path.join('instance', 'mysql.conf.json')) as f:
         config = json.load(f)
@@ -159,12 +164,19 @@ if __name__ == '__main__':
         })
 
     while (True):
+        import time
         for item in items:
+            start = time.time()
+            logging.info("OCR Start - Device ID : " + str(item["id"]))
             print("OCR Start - Device ID : " + str(item["id"]))
             result = run(item)
             sql = "INSERT INTO `records` (`device_id`, `value`) VALUES ({device_id}, {value})".format(
                 device_id=item["id"], value=result)
             db.execute(sql)
             db.commit()
+            logging.info("OCR Finished - Device ID : " + str(item["id"]) +
+                         " Result : " + str(result))
             print("OCR Finished - Device ID : " + str(item["id"]) +
                   " Result : " + str(result))
+            end = time.time()
+            print("%.2fs" % (end - start))

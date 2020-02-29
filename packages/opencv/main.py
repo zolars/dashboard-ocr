@@ -43,7 +43,7 @@ def calibrate(img):
     # gray = cv2.medianBlur(gray, 5)
 
     # for testing, output gray image
-    # cv2.imwrite('./out/%s-bw.%s' %(0, 'jpg'),gray)
+    # cv2.imwrite('./out/%s-bw.%s' % (0, 'jpg'), gray)
 
     # detect circles
     # restricting the search from 35-48% of the possible radii gives fairly good results across different samples.  Remember that
@@ -139,9 +139,9 @@ def get_current_value(img, min_angle, max_angle, min_value, max_value, x, y,
     th, dst2 = cv2.threshold(gray2, thresh, maxValue, cv2.THRESH_BINARY_INV)
 
     # found Hough Lines generally performs better without Canny / blurring, though there were a couple exceptions where it would only work with Canny / blurring
-    dst2 = cv2.medianBlur(dst2, 5)
-    dst2 = cv2.Canny(dst2, 50, 150)
-    dst2 = cv2.GaussianBlur(dst2, (5, 5), 0)
+    # dst2 = cv2.medianBlur(dst2, 5)
+    # dst2 = cv2.Canny(dst2, 50, 150)
+    # dst2 = cv2.GaussianBlur(dst2, (5, 5), 0)
 
     # for testing, show image after thresholding
     # cv2.imwrite('./out/%s-tempdst2.%s' % (0, 'jpg'), dst2)
@@ -202,7 +202,7 @@ def get_current_value(img, min_angle, max_angle, min_value, max_value, x, y,
         if dist_2_pts(x1, y1, x2, y2) > max_length:
             xx1, yy1, xx2, yy2 = x1, y1, x2, y2
             max_length = dist_2_pts(x1, y1, x2, y2)
-        # cv2.line(img, (x1, y1), (x2, y2), (0, 0, 255), 2)
+        cv2.line(img, (x1, y1), (x2, y2), (0, 0, 255), 2)
 
     # assumes the longest line is the best one
     x1, y1, x2, y2 = xx1, yy1, xx2, yy2
