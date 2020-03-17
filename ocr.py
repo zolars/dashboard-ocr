@@ -106,7 +106,7 @@ def ocr(img, min_angle, max_angle, min_value, max_value, x, y, r):
     _, cropped = runYOLO(img)
 
     logging.info("Run OpenCV...")
-    img_output = None
+    value = None
     # clock images collection
     if 'clock' in cropped:
         count = 0

@@ -3,7 +3,7 @@
 import cv2
 import numpy as np
 import math
-import time
+from datetime import datetime as dt
 
 
 def avg_circles(circles, b):
@@ -120,7 +120,7 @@ def get_current_value(img, min_angle, max_angle, min_value, max_value, x, y,
     gray2 = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
     # Set threshold and maxValue
-    thresh = 175
+    thresh = 165  # 175
     maxValue = 255
 
     # for testing purposes, found cv2.THRESH_BINARY_INV to perform the best
