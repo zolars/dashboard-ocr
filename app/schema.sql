@@ -4,17 +4,17 @@ USE dashboard;
 /*
  Navicat MySQL Data Transfer
 
- Source Server         : Test
- Source Server Type    : MySQL
- Source Server Version : 50562
+ Source Server         : MariaDB
+ Source Server Type    : MariaDB
+ Source Server Version : 100411
  Source Host           : localhost:3306
  Source Schema         : dashboard
 
- Target Server Type    : MySQL
- Target Server Version : 50562
+ Target Server Type    : MariaDB
+ Target Server Version : 100411
  File Encoding         : 65001
 
- Date: 27/02/2020 21:41:04
+ Date: 06/04/2020 00:42:52
 */
 
 SET NAMES utf8mb4;
@@ -28,6 +28,8 @@ CREATE TABLE `device_info` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `address` varchar(255) NOT NULL,
+  `type` varchar(255) NOT NULL,
+  `num` int(11) NOT NULL,
   `minAngle` int(11) NOT NULL,
   `maxAngle` int(11) NOT NULL,
   `minValue` int(11) NOT NULL,
@@ -38,7 +40,7 @@ CREATE TABLE `device_info` (
   `y` int(11) NOT NULL,
   `r` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for records
@@ -46,10 +48,10 @@ CREATE TABLE `device_info` (
 DROP TABLE IF EXISTS `records`;
 CREATE TABLE `records` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `time` timestamp NOT NULL DEFAULT current_timestamp(),
   `device_id` int(11) NOT NULL,
   `value` float(11,3) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
 SET FOREIGN_KEY_CHECKS = 1;

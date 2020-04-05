@@ -1,4 +1,6 @@
 $(document).ready(function () {
+  let deviceNum = false;
+  let deviceType = false;
   let calibrateResult = false;
   if (Params.deviceName != null) {
     $("input#deviceName").val(Params.deviceName);
@@ -25,7 +27,7 @@ $(document).ready(function () {
       success: function (response) {
         flash("Connection Success!", "success");
 
-        $("div#configDevice_choose").css("display", "block");
+        $("div#configDevice_preview").css("display", "block");
         $("a#resetDevice").css("display", "table");
         $("a#testDevice").css("display", "none");
         $("a#webcamConfig").css("display", "table");
@@ -54,10 +56,80 @@ $(document).ready(function () {
     location.href = Urls.pages.addDevice;
   });
 
+  $("a#preview").click(function () {
+    const data = {
+      deviceName: $("input#deviceName").val(),
+      deviceAddress: $("input#deviceAddress").val(),
+    };
+    $("div#floatLayer").show();
+    $.ajax({
+      url: Urls.server.preview,
+      type: "post",
+      data: data,
+      dataType: "json",
+      async: false,
+      success: function (result) {
+        img = $("img#preview");
+        src = Urls.server.getPreview;
+        img.attr("src", src + "?r=" + new Date().getTime());
+        $("div#floatLayer").hide();
+        console.log(result);
+
+        flash("Refresh Success!", "success");
+
+        $("a#choose").removeClass("disabled");
+        for (var i = 0; i < result.clock_num; i++) {
+          $("ul#choose").append(
+            '<li><a name="choice" class="col-center-block" href="javascript:void(0);">clock_' +
+              i +
+              "</a></li>"
+          );
+        }
+        for (var i = 0; i < result.tvmonitor_num; i++) {
+          $("ul#choose").append(
+            '<li><a name="choice" class="col-center-block" href="javascript:void(0);">tvmonitor_' +
+              i +
+              "</a></li>"
+          );
+        }
+      },
+      error: function (err) {
+        $("div#floatLayer").hide();
+
+        flash(
+          "Refresh Failed! Error Msg:<br /><br />> " + err.statusText,
+          "error"
+        );
+        console.log(err);
+      },
+    });
+  });
+
+  $("ul#choose").on("click", "a[name='choice']", function () {
+    let previewResult = $(this)[0].text;
+    $("p#deviceNum").append(
+      ' <i class="fas fa-exclamation-circle"></i>You have chose the ' +
+        previewResult +
+        " ."
+    );
+
+    deviceType = previewResult.split("_")[0];
+    deviceNum = parseInt(previewResult.split("_")[1]);
+
+    $("a#webcamConfig").addClass("disabled");
+    $("a#preview").addClass("disabled");
+    $("a#choose").addClass("disabled");
+
+    if (deviceType == "clock") {
+      $("div#configDevice_calibration").css("display", "block");
+    }
+  });
+
   $("a#refresh").click(function () {
     const data = {
       deviceName: $("input#deviceName").val(),
       deviceAddress: $("input#deviceAddress").val(),
+      deviceNum: deviceNum,
     };
     $("div#floatLayer").show();
     $.ajax({
@@ -167,6 +239,8 @@ $(document).ready(function () {
     const data = {
       deviceName: $("input#deviceName").val(),
       deviceAddress: $("input#deviceAddress").val(),
+      deviceType: deviceType,
+      deviceNum: deviceNum,
       minAngle: parseInt($("input#minAngle").val()),
       maxAngle: parseInt($("input#maxAngle").val()),
       minValue: parseInt($("input#minValue").val()),

@@ -142,6 +142,8 @@ def detect(img_raw):
         unique_labels = detections[:, -1].cpu().unique()
         n_cls_preds = len(unique_labels)
         bbox_colors = random.sample(colors, n_cls_preds)
+
+        count = 0
         for x1, y1, x2, y2, conf, cls_conf, cls_pred in detections:
 
             logging.info("\t+ Label: %s, Conf: %.5f" %
@@ -165,7 +167,7 @@ def detect(img_raw):
             plt.text(
                 x1,
                 y1,
-                s=classes[int(cls_pred)],
+                s=classes[int(cls_pred)] + "_" + str(count),
                 color="white",
                 verticalalignment="top",
                 bbox={
@@ -179,6 +181,8 @@ def detect(img_raw):
                 cropped[classes[int(cls_pred)]] = []
             cropped[classes[int(cls_pred)]].append(
                 (x1.item(), y1.item(), x2.item(), y2.item()))
+
+            count += 1
 
     # Save generated image with detections
     plt.axis("off")

@@ -337,6 +337,8 @@
         },
         server: {
           data: "{{ url_for('server.data') }}",
+          preview: "{{ url_for('server.preview') }}",
+          getPreview: "{{ url_for('server.getPreview')}}",
           calibrate: "{{ url_for('server.calibrate') }}",
           getCalibrate: "{{ url_for('server.getCalibrate')}}",
           testDatabase: "{{ url_for('server.testDatabase') }}",

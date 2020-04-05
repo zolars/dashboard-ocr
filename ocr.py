@@ -65,7 +65,7 @@ def runYOLO(img):
     return _, cropped
 
 
-def ocr(img, min_angle, max_angle, min_value, max_value, x, y, r):
+def ocr(img, type, num, min_angle, max_angle, min_value, max_value, x, y, r):
     img = Image.open(img).convert("RGB")
     logging.info("Run YOLO...")
     _, cropped = runYOLO(img)
@@ -74,14 +74,13 @@ def ocr(img, min_angle, max_angle, min_value, max_value, x, y, r):
     value = None
     # clock images collection
     if 'clock' in cropped:
-        count = 0
-        for i in cropped['clock']:
-            img_crop = img.crop((i[0] - 20, i[1] - 20, i[2] + 20, i[3] + 20))
-            # img_crop.save("./out/clock_" + str(count) + ".jpg")
 
-            img_input = cv2.cvtColor(np.asarray(img_crop), cv2.COLOR_RGB2BGR)
-            value = opencv.get_current_value(img_input, min_angle, max_angle,
-                                             min_value, max_value, x, y, r)
+        i = cropped['clock'][num]
+        img_crop = img.crop((i[0] - 20, i[1] - 20, i[2] + 20, i[3] + 20))
+
+        img_input = cv2.cvtColor(np.asarray(img_crop), cv2.COLOR_RGB2BGR)
+        value = opencv.get_current_value(img_input, min_angle, max_angle,
+                                         min_value, max_value, x, y, r)
     return value
 
 
@@ -90,8 +89,9 @@ def run(item):
     logging.info("Requests Get...")
     response = requests.get(item['address'] + webcam_op['photo'])
     img = BytesIO(response.content)
-    result = ocr(img, item['minAngle'], item['maxAngle'], item['minValue'],
-                 item['maxValue'], item['x'], item['y'], item['r'])
+    result = ocr(img, item['type'], item['num'], item['minAngle'],
+                 item['maxAngle'], item['minValue'], item['maxValue'],
+                 item['x'], item['y'], item['r'])
     return result
 
 

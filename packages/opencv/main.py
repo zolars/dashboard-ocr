@@ -120,7 +120,7 @@ def get_current_value(img, min_angle, max_angle, min_value, max_value, x, y,
     gray2 = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
     # Set threshold and maxValue
-    thresh = 165  # 175
+    thresh = 105  # 175
     maxValue = 255
 
     # for testing purposes, found cv2.THRESH_BINARY_INV to perform the best

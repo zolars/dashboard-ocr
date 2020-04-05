@@ -43,17 +43,42 @@ def data():
     return c.dump_options_with_quotes()
 
 
+@bp.route('/preview', methods=['POST'])
+def preview():
+    from io import BytesIO
+
+    try:
+        deviceAddress = request.form["deviceAddress"]
+        response = requests.get(deviceAddress + webcam_op['photo'])
+        img = BytesIO(response.content)
+        clock_num, tvmonitor_num = detect.preview(img)
+
+    except Exception as e:
+        logging.debug(e)
+        abort(500)
+
+    return {"clock_num": clock_num, "tvmonitor_num": tvmonitor_num}
+
+
+@bp.route('/getPreview', methods=['get'])
+def getPreview():
+    with open(os.path.join("out", "preview.png"), "rb") as f:
+        img = f.read()
+        response = make_response(img)
+        response.headers['Content-Type'] = 'image/png'
+        return response
+
+
 @bp.route('/calibrate', methods=['POST'])
 def calibrate():
     from io import BytesIO
 
     try:
         deviceAddress = request.form["deviceAddress"]
-        deviceNumber = 0
+        deviceNum = int(request.form["deviceNum"])
         response = requests.get(deviceAddress + webcam_op['photo'])
         img = BytesIO(response.content)
-        results = detect.calibrate(img)
-        x, y, r = results[deviceNumber]
+        x, y, r = detect.calibrate(img, deviceNum)
     except Exception as e:
         logging.debug(e)
         abort(500)
@@ -63,11 +88,7 @@ def calibrate():
 
 @bp.route('/getCalibrate', methods=['get'])
 def getCalibrate():
-    deviceNumber = 0
-    with open(
-            os.path.join("out",
-                         "clock_" + str(deviceNumber) + "_calibrate.jpg"),
-            "rb") as f:
+    with open(os.path.join("out", "clock_calibrate.jpg"), "rb") as f:
         img = f.read()
         response = make_response(img)
         response.headers['Content-Type'] = 'image/png'
@@ -134,6 +155,8 @@ def resetDatabase():
 def saveDevice():
     name = request.form['deviceName']
     address = request.form['deviceAddress']
+    type = request.form['deviceType']
+    num = request.form['deviceNum']
     minAngle = request.form["minAngle"]
     maxAngle = request.form["maxAngle"]
     minValue = request.form["minValue"]
@@ -150,9 +173,11 @@ def saveDevice():
     except:
         description = "NULL"
 
-    sql = "INSERT INTO `device_info` (`name`, `address`, `minAngle`, `maxAngle`, `minValue`, `maxValue`, `unit`, `description`, `x`, `y`, `r`) VALUES ('{name}', '{address}', {minAngle}, {maxAngle}, {minValue}, {maxValue}, {unit}, {description}, {x}, {y}, {r})".format(
+    sql = "INSERT INTO `device_info` (`name`, `address`, `type`, `num`, `minAngle`, `maxAngle`, `minValue`, `maxValue`, `unit`, `description`, `x`, `y`, `r`) VALUES ('{name}', '{address}', '{type}', '{num}', {minAngle}, {maxAngle}, {minValue}, {maxValue}, {unit}, {description}, {x}, {y}, {r})".format(
         name=name,
         address=address,
+        type=type,
+        num=num,
         minAngle=minAngle,
         maxAngle=maxAngle,
         minValue=minValue,

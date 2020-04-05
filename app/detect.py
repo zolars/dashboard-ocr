@@ -1,6 +1,5 @@
 import os
 import logging
-import requests
 import datetime as dt
 from io import BytesIO
 from multiprocessing import Process, Pool
@@ -28,30 +27,39 @@ def runYOLO(img):
     return _, cropped
 
 
-def calibrate(img):
+def preview(img):
+    from io import BytesIO
+
+    img = Image.open(img).convert("RGB")
+    plt_bytes, cropped = runYOLO(img)
+    img_output = Image.open(BytesIO(plt_bytes))
+    img_output.save("./out/preview.png")
+
+    clock_num, tvmonitor_num = 0, 0
+    if 'clock' in cropped:
+        clock_num = len(cropped['clock'])
+    if 'tvmonitor' in cropped:
+        tvmonitor_num = len(cropped['tvmonitor'])
+
+    return clock_num, tvmonitor_num
+
+
+def calibrate(img, deviceNum):
     img = Image.open(img).convert("RGB")
     _, cropped = runYOLO(img)
 
     img_output = None
     # clock images collection
     if 'clock' in cropped:
-        count = 0
-        results = []
-        for i in cropped['clock']:
-            img_crop = img.crop((i[0] - 20, i[1] - 20, i[2] + 20, i[3] + 20))
-            # img_crop.save("./out/clock_" + str(count) + ".jpg")
+        i = cropped['clock'][deviceNum]
+        img_crop = img.crop((i[0] - 20, i[1] - 20, i[2] + 20, i[3] + 20))
 
-            img_input = cv2.cvtColor(np.asarray(img_crop), cv2.COLOR_RGB2BGR)
+        img_input = cv2.cvtColor(np.asarray(img_crop), cv2.COLOR_RGB2BGR)
+        x, y, r = opencv.calibrate(img_input)
+        img_output = opencv.draw_calibration(img_input, x, y, r)
+        cv2.imwrite("./out/clock_calibrate.jpg", img_output)
 
-            x, y, r = opencv.calibrate(img_input)
-            img_output = opencv.draw_calibration(img_input, x, y, r)
-            cv2.imwrite("./out/clock_" + str(count) + "_calibrate.jpg",
-                        img_output)
-
-            results.append({'x': x, 'y': y, 'r': r})
-            count += 1
-
-    return results
+        return x, y, r
 
 
 def ocr(img, min_angle, max_angle, min_value, max_value, x, y, r):
