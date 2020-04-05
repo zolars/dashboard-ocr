@@ -36,6 +36,7 @@ def calibrate(img):
     # clock images collection
     if 'clock' in cropped:
         count = 0
+        results = []
         for i in cropped['clock']:
             img_crop = img.crop((i[0] - 20, i[1] - 20, i[2] + 20, i[3] + 20))
             # img_crop.save("./out/clock_" + str(count) + ".jpg")
@@ -47,19 +48,10 @@ def calibrate(img):
             cv2.imwrite("./out/clock_" + str(count) + "_calibrate.jpg",
                         img_output)
 
+            results.append({'x': x, 'y': y, 'r': r})
             count += 1
 
-            return x, y, r
-
-    # # tvmonitor images collection
-    # if 'tvmonitor' in cropped:
-    #     count = 0
-    #     for i in cropped['tvmonitor']:
-    #         img_crop = img.crop(
-    #             (i[0] - 20, i[1] - 20, i[2] + 20, i[3] + 20))
-    #         img_crop.save("./out/tvmonitor_" + str(count) + ".jpg")
-    #         _.save("./out/tvmonitor_" + str(count) + "_marked.jpg")
-    #         count += 1
+    return results
 
 
 def ocr(img, min_angle, max_angle, min_value, max_value, x, y, r):

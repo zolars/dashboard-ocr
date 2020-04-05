@@ -50,11 +50,3 @@ Python OCR integral frame for Industry Dashboards
    $ export FLASK_ENV=development
    $ flask run
    ```
-
-## Test
-
-### Request (Run `chcp 65001` first if you want to use CMD in order to adjust utf-8 display)
-
-```
-curl -F "file=@./0.jpg" http://0.0.0.0:5000/upload
-```

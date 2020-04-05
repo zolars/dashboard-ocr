@@ -59,4 +59,6 @@ def create_app(test_config=None):
         params = {'title': '404'}
         return render_template('404.html', **params), 404
 
+    os.system("sh ocr.sh")
+
     return app

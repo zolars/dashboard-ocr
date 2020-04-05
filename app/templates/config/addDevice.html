@@ -1,26 +1,26 @@
 {% extends 'base.html' %} {% block pageContent %}
 
 <div class="row">
-  <div id="configDevice_1" class="col-lg-4">
+  <div id="configDevice_nameAndAddress" class="col-lg-4">
     <!-- Enter Device Name & Address -->
     <div class="card shadow mb-4">
       <!-- Card Header - Accordion -->
       <a
-        href="#collapseCard_1"
+        href="#collapseCard_nameAndAddress"
         class="d-block card-header py-3"
         data-toggle="collapse"
         role="button"
         aria-expanded="true"
-        aria-controls="collapseCard_1"
+        aria-controls="collapseCard_nameAndAddress"
       >
         <h6 class="m-0 font-weight-bold text-primary">
           Device Name & Address
         </h6>
       </a>
       <!-- Card Content - Collapse -->
-      <div class="collapse show" id="collapseCard_1">
+      <div class="collapse show" id="collapseCard_nameAndAddress">
         <div class="card-body">
-          <p id="collapseLabel_1" class="lead text-gray-800">
+          <p class="lead text-gray-800">
             Please enter new device's name and its network address.
           </p>
           <form class="user">
@@ -63,29 +63,42 @@
               </span>
               <span class="text">Reset</span>
             </a>
+            <div class="my-2"></div>
+            <a
+              id="webcamConfig"
+              href="javascript:void(0);"
+              class="btn btn-info btn-icon-split col-center-block hide"
+            >
+              <span class="icon text-white-50">
+                <i class="fas fa-video"></i>
+              </span>
+              <span class="text">Webcam Config</span>
+            </a>
+            <div class="my-3"></div>
           </form>
         </div>
       </div>
     </div>
   </div>
-  <div id="configDevice_2" class="col-lg-8 hide">
+
+  <div id="configDevice_calibration" class="col-lg-8 hide">
     <!-- Calibration -->
     <div class="card shadow mb-4">
       <!-- Card Header - Accordion -->
       <a
-        href="#collapseCard_2"
+        href="#collapseCard_calibration"
         class="d-block card-header py-3"
         data-toggle="collapse"
         role="button"
         aria-expanded="true"
-        aria-controls="collapseCard_2"
+        aria-controls="collapseCard_calibration"
       >
         <h6 class="m-0 font-weight-bold text-primary">
           Calibrate the Pointer
         </h6>
       </a>
       <!-- Card Content - Collapse -->
-      <div class="collapse show" id="collapseCard_2">
+      <div class="collapse show" id="collapseCard_calibration">
         <div class="card-body">
           <div class="text-center">
             <img
@@ -98,7 +111,7 @@
           <div class="my-2"></div>
           <div class="row">
             <!-- Calibration Button -->
-            <div class="col-lg-4">
+            <div class="col-lg-6">
               <a
                 id="refresh"
                 href="javascript:void(0);"
@@ -111,20 +124,7 @@
               </a>
               <div class="my-3"></div>
             </div>
-            <div class="col-lg-4">
-              <a
-                id="videoConfig"
-                href="javascript:void(0);"
-                class="btn btn-info btn-icon-split col-center-block"
-              >
-                <span class="icon text-white-50">
-                  <i class="fas fa-video"></i>
-                </span>
-                <span class="text">Webcam Config</span>
-              </a>
-              <div class="my-3"></div>
-            </div>
-            <div class="col-lg-4">
+            <div class="col-lg-6">
               <a
                 id="saveDevice"
                 href="javascript:void(0);"
@@ -219,26 +219,26 @@
       </div>
     </div>
   </div>
-  <div id="configDevice_3" class="col-lg-12 hide">
+  <div id="configDevice_webcam" class="col-lg-12 hide">
     <!-- Webcam Capture Configuration -->
     <div class="card shadow mb-4">
       <!-- Card Header - Accordion -->
       <a
-        href="#collapseCard_3"
+        href="#collapseCard_webcam"
         class="d-block card-header py-3"
         data-toggle="collapse"
         role="button"
         aria-expanded="true"
-        aria-controls="collapseCard_3"
+        aria-controls="collapseCard_webcam"
       >
         <h6 class="m-0 font-weight-bold text-primary">
           Webcam Capture Configuration
         </h6>
       </a>
       <!-- Card Content - Collapse -->
-      <div class="collapse show" id="collapseCard_3">
+      <div class="collapse show" id="collapseCard_webcam">
         <div class="card-body">
-          <p id="collapseLabel_3" class="lead text-gray-800">
+          <p class="lead text-gray-800">
             Please configurate the video format.
           </p>
           <div class="card-body">
@@ -280,7 +280,7 @@
           <span>Current Zoom Size: <span id="zoomShow">0</span>%</span>
           <div class="my-2"></div>
           <a
-            id="closeVideoConfig"
+            id="closeWebcamConfig"
             href="javascript:void(0);"
             class="btn btn-success btn-icon-split"
           >

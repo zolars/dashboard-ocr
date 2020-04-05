@@ -48,11 +48,12 @@ def calibrate():
     from io import BytesIO
 
     try:
-        deviceName = request.form["deviceName"]
         deviceAddress = request.form["deviceAddress"]
+        deviceNumber = 0
         response = requests.get(deviceAddress + webcam_op['photo'])
         img = BytesIO(response.content)
-        x, y, r = detect.calibrate(img)
+        results = detect.calibrate(img)
+        x, y, r = results[deviceNumber]
     except Exception as e:
         logging.debug(e)
         abort(500)
@@ -62,7 +63,11 @@ def calibrate():
 
 @bp.route('/getCalibrate', methods=['get'])
 def getCalibrate():
-    with open(os.path.join("out", "clock_0_calibrate.jpg"), "rb") as f:
+    deviceNumber = 0
+    with open(
+            os.path.join("out",
+                         "clock_" + str(deviceNumber) + "_calibrate.jpg"),
+            "rb") as f:
         img = f.read()
         response = make_response(img)
         response.headers['Content-Type'] = 'image/png'
@@ -161,5 +166,22 @@ def saveDevice():
     db.execute(sql)
     db.commit()
     close_db()
+
+    os.system("sh ocr.sh")
+
+    return 'Ok'
+
+
+@bp.route('/config/deleteDevice', methods=['POST'])
+def deleteDevice():
+    device_id = request.form['device_id']
+    sql = "DELETE FROM `device_info` WHERE `id`={device_id}".format(
+        device_id=device_id)
+    db = get_db()
+    db.execute(sql)
+    db.commit()
+    close_db()
+
+    os.system("sh ocr.sh")
 
     return 'Ok'

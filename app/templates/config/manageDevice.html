@@ -1,5 +1,5 @@
 {% extends 'base.html' %} {% block pageContent %} {% if params.deviceItems == []
-%}
+%} <br /><br /><br /><br /><br />
 <div class="text-center">
   <div class="error mx-auto" data-text="404">: (</div>
   <p class="lead text-gray-800 mb-5">Device Not Found</p>
@@ -36,14 +36,19 @@
             class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
             aria-labelledby="dropdownMenuLink"
           >
-            <a id="previewFor{{ item.id }}" class="dropdown-item" href="#"
+            <a
+              id="previewFor{{ item.id }}"
+              name="preview"
+              class="dropdown-item"
+              href="#"
               ><i class="fas fa-eye"></i> Preview</a
             >
-            <a id="editFor{{ item.id }}" class="dropdown-item" href="#"
-              ><i class="fas fa-edit"></i> Edit</a
-            >
             <div class="dropdown-divider"></div>
-            <a id="deleteFor{{ item.id }}" class="dropdown-item" href="#"
+            <a
+              id="deleteFor{{ item.id }}"
+              name="delete"
+              class="dropdown-item"
+              href="#"
               ><i class="fas fa-trash-alt"></i> Delete</a
             >
           </div>

@@ -66,7 +66,14 @@ def detect(img_raw):
     parser.add_argument("--checkpoint_model",
                         type=str,
                         help="path to checkpoint model")
-    parser.add_argument("run", type=str, help="default flask instruction")
+    parser.add_argument("--id",
+                        type=int,
+                        help="default ocr instruction",
+                        default=None)
+    parser.add_argument("run",
+                        type=str,
+                        help="default flask instruction",
+                        default=None)
     opt = parser.parse_args()
     logging.info(opt)
 

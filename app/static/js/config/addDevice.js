@@ -1,4 +1,4 @@
-$(document).ready(function() {
+$(document).ready(function () {
   let calibrateResult = false;
   if (Params.deviceName != null) {
     $("input#deviceName").val(Params.deviceName);
@@ -7,10 +7,10 @@ $(document).ready(function() {
     $("input#deviceAddress").val(Params.deviceAddress);
   }
 
-  $("a#testDevice").click(function() {
+  $("a#testDevice").click(function () {
     const data = {
       deviceName: $("input#deviceName").val(),
-      deviceAddress: $("input#deviceAddress").val()
+      deviceAddress: $("input#deviceAddress").val(),
     };
 
     let url = data.deviceAddress + Params.op.status;
@@ -22,15 +22,16 @@ $(document).ready(function() {
       dataType: "json",
       async: true,
       timeout: 2000,
-      success: function(response) {
+      success: function (response) {
         flash("Connection Success!", "success");
 
-        $("div#configDevice_2").css("display", "block");
+        $("div#configDevice_choose").css("display", "block");
         $("a#resetDevice").css("display", "table");
         $("a#testDevice").css("display", "none");
+        $("a#webcamConfig").css("display", "table");
         $("input#deviceName").attr("disabled", "disabled");
         $("input#deviceAddress").attr("disabled", "disabled");
-        $("p#collapseLabel_1").text(
+        $("p#collapseLabel_nameAndAddress").text(
           "New device's name and its network address is as below. "
         );
         if (response.curvals.torch == "off") {
@@ -39,20 +40,24 @@ $(document).ready(function() {
           $("a#switchTorch").addClass("btn-danger");
         }
       },
-      error: function(err) {
+      error: function (err) {
         flash(
           "Connection Failed! Error Msg:<br /><br />> " + err.statusText,
           "error"
         );
         console.log(err);
-      }
+      },
     });
   });
 
-  $("a#refresh").click(function() {
+  $("a#resetDevice").click(function () {
+    location.href = Urls.pages.addDevice;
+  });
+
+  $("a#refresh").click(function () {
     const data = {
       deviceName: $("input#deviceName").val(),
-      deviceAddress: $("input#deviceAddress").val()
+      deviceAddress: $("input#deviceAddress").val(),
     };
     $("div#floatLayer").show();
     $.ajax({
@@ -61,7 +66,7 @@ $(document).ready(function() {
       data: data,
       dataType: "json",
       async: false,
-      success: function(result) {
+      success: function (result) {
         img = $("img#calibration");
         src = Urls.server.getCalibrate;
         img.attr("src", src + "?r=" + new Date().getTime());
@@ -71,7 +76,7 @@ $(document).ready(function() {
 
         flash("Refresh Success!", "success");
       },
-      error: function(err) {
+      error: function (err) {
         $("div#floatLayer").hide();
 
         flash(
@@ -79,28 +84,28 @@ $(document).ready(function() {
           "error"
         );
         console.log(err);
-      }
+      },
     });
   });
 
-  $("a#videoConfig").click(function() {
+  $("a#webcamConfig").click(function () {
     const data = {
       deviceName: $("input#deviceName").val(),
-      deviceAddress: $("input#deviceAddress").val()
+      deviceAddress: $("input#deviceAddress").val(),
     };
-    $("div#configDevice_3").css("display", "block");
+    $("div#configDevice_webcam").css("display", "block");
     $("img#videoPanel").attr("src", data.deviceAddress + Params.op.video);
   });
 
-  $("a#closeVideoConfig").click(function() {
-    $("div#configDevice_3").css("display", "none");
+  $("a#closeWebcamConfig").click(function () {
+    $("div#configDevice_webcam").css("display", "none");
     $("img#videoPanel").attr("src", "");
   });
 
-  $("a#switchTorch").click(function() {
+  $("a#switchTorch").click(function () {
     const data = {
       deviceName: $("input#deviceName").val(),
-      deviceAddress: $("input#deviceAddress").val()
+      deviceAddress: $("input#deviceAddress").val(),
     };
     let url;
     if ($("a#switchTorch").hasClass("btn-warning")) {
@@ -116,27 +121,27 @@ $(document).ready(function() {
       url: url,
       type: "get",
       async: true,
-      success: function() {
+      success: function () {
         flash("Operation Success!", "success");
       },
-      error: function(err) {
+      error: function (err) {
         flash(
           "Operation Failed! Error Msg:<br /><br />> " + err.statusText,
           "error"
         );
         console.log(err);
-      }
+      },
     });
   });
 
   $("input#zoom").slider({
-    formatter: function(value) {
+    formatter: function (value) {
       if (value == 0) {
         return;
       }
       const data = {
         deviceName: $("input#deviceName").val(),
-        deviceAddress: $("input#deviceAddress").val()
+        deviceAddress: $("input#deviceAddress").val(),
       };
       $.ajax({
         url: data.deviceAddress + Params.op.ptz.format({ zoom: value }),
@@ -144,17 +149,17 @@ $(document).ready(function() {
         data: "",
         dataType: "text",
         async: true,
-        success: function() {
+        success: function () {
           $("span#zoomShow").text(value);
         },
-        error: function(err) {
+        error: function (err) {
           console.log(err);
-        }
+        },
       });
-    }
+    },
   });
 
-  $("a#saveDevice").click(function() {
+  $("a#saveDevice").click(function () {
     if (!calibrateResult) {
       flash("Please refresh the calibration once", "error");
       return;
@@ -170,7 +175,7 @@ $(document).ready(function() {
       description: $("input#description").val(),
       x: calibrateResult.x,
       y: calibrateResult.y,
-      r: calibrateResult.r
+      r: calibrateResult.r,
     };
 
     if (
@@ -187,17 +192,17 @@ $(document).ready(function() {
         type: "post",
         data: data,
         async: false,
-        success: function() {
+        success: function () {
           flash("Device saved Successfully!", "success");
           location.href = Urls.pages.manageDevice;
         },
-        error: function(err) {
+        error: function (err) {
           flash(
             "Device saved Failed! Error Msg:<br /><br />> " + err.statusText,
             "error"
           );
           console.log(err);
-        }
+        },
       });
     } else {
       flash("Your input is incorrect. Please check again.", "error");

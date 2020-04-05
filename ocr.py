@@ -5,8 +5,7 @@ import requests
 import pymysql
 import pandas as pd
 from io import BytesIO
-import threading
-import multiprocessing
+import subprocess
 
 import cv2
 from PIL import Image
@@ -66,40 +65,6 @@ def runYOLO(img):
     return _, cropped
 
 
-def calibrate(img):
-    img = Image.open(img).convert("RGB")
-    _, cropped = runYOLO(img)
-
-    img_output = None
-    # clock images collection
-    if 'clock' in cropped:
-        count = 0
-        for i in cropped['clock']:
-            img_crop = img.crop((i[0] - 20, i[1] - 20, i[2] + 20, i[3] + 20))
-            # img_crop.save("./out/clock_" + str(count) + "_cropped.jpg")
-
-            img_input = cv2.cvtColor(np.asarray(img_crop), cv2.COLOR_RGB2BGR)
-
-            x, y, r = opencv.calibrate(img_input)
-            img_output = opencv.draw_calibration(img_input, x, y, r)
-            # cv2.imwrite("./out/clock_" + str(count) + "_calibrate.jpg",
-            #             img_output)
-
-            count += 1
-
-            return x, y, r
-
-    # # tvmonitor images collection
-    # if 'tvmonitor' in cropped:
-    #     count = 0
-    #     for i in cropped['tvmonitor']:
-    #         img_crop = img.crop(
-    #             (i[0] - 20, i[1] - 20, i[2] + 20, i[3] + 20))
-    #         img_crop.save("./out/tvmonitor_" + str(count) + ".jpg")
-    #         _.save("./out/tvmonitor_" + str(count) + "_marked.jpg")
-    #         count += 1
-
-
 def ocr(img, min_angle, max_angle, min_value, max_value, x, y, r):
     img = Image.open(img).convert("RGB")
     logging.info("Run YOLO...")
@@ -131,41 +96,56 @@ def run(item):
 
 
 if __name__ == '__main__':
+    import argparse
+    parser = argparse.ArgumentParser(description='device ID for this script')
+    parser.add_argument('--id', type=int, default=None)
+    parser.add_argument("run",
+                        type=str,
+                        help="default flask instruction",
+                        default=None)
+    args = parser.parse_args()
+    device_id = args.id
 
-    logging.basicConfig(filename='./log/ocr.log',
-                        filemode="a+",
-                        format="%(asctime)s %(levelname)s : %(message)s",
-                        datefmt="%Y-%m-%d %H:%M:%S",
-                        level=logging.DEBUG)
+    if device_id == None:
+        logging.basicConfig(filename='./log/ocr.log',
+                            filemode="a+",
+                            format="%(asctime)s %(levelname)s : %(message)s",
+                            datefmt="%Y-%m-%d %H:%M:%S",
+                            level=logging.DEBUG)
 
-    logging.info("OCR Server is beginning...")
+        logging.info("OCR Server is beginning...")
 
-    with open(os.path.join('instance', 'mysql.conf.json')) as f:
-        config = json.load(f)
-    username = config['MYSQL_USERNAME']
-    password = config['MYSQL_PASSWORD']
+        with open(os.path.join('instance', 'mysql.conf.json')) as f:
+            config = json.load(f)
+        username = config['MYSQL_USERNAME']
+        password = config['MYSQL_PASSWORD']
+        db = MySQL(username, password)
+        sql = 'SELECT * FROM `device_info` ORDER BY id'.format(
+            device_id=device_id)
 
-    sql = 'SELECT * FROM `device_info` ORDER BY id'
-    db = MySQL(username, password)
-    results = db.fetchall(sql)
+        df = db.fetchall(sql)
 
-    items = []
-    for _, row in results.iterrows():
-        items.append({
-            'id': row['id'],
-            'address': row['address'],
-            'minAngle': row['minAngle'],
-            'maxAngle': row['maxAngle'],
-            'minValue': row['minValue'],
-            'maxValue': row['maxValue'],
-            'x': row['x'],
-            'y': row['y'],
-            'r': row['r']
-        })
+        for _, row in df.iterrows():
+            device_id = row['id']
+            subprocess.Popen('python ocr.py --id ' + str(device_id) + ' run',
+                             executable=None,
+                             shell=True)
 
-    while (True):
-        import time
-        for item in items:
+    else:
+
+        with open(os.path.join('instance', 'mysql.conf.json')) as f:
+            config = json.load(f)
+        username = config['MYSQL_USERNAME']
+        password = config['MYSQL_PASSWORD']
+        db = MySQL(username, password)
+        sql = 'SELECT * FROM `device_info` WHERE `id`={device_id} ORDER BY id'.format(
+            device_id=device_id)
+
+        item = db.fetchall(sql).iloc[0]
+
+        while (True):
+            import time
+
             start = time.time()
             logging.info("OCR Start - Device ID : " + str(item["id"]))
             print("OCR Start - Device ID : " + str(item["id"]))
