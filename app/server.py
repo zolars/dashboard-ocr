@@ -51,13 +51,16 @@ def preview():
         deviceAddress = request.form["deviceAddress"]
         response = requests.get(deviceAddress + webcam_op['photo'])
         img = BytesIO(response.content)
-        clock_num, tvmonitor_num = detect.preview(img)
+        # with open('./images/0.png', 'rb') as f:
+        #     a = f.read()
+        #     img = BytesIO(a)
+        dial_gauge_num = detect.preview(img)
 
     except Exception as e:
         logging.debug(e)
         abort(500)
 
-    return {"clock_num": clock_num, "tvmonitor_num": tvmonitor_num}
+    return {"dial_gauge_num": dial_gauge_num}
 
 
 @bp.route('/getPreview', methods=['get'])
@@ -78,6 +81,9 @@ def calibrate():
         deviceNum = int(request.form["deviceNum"])
         response = requests.get(deviceAddress + webcam_op['photo'])
         img = BytesIO(response.content)
+        # with open('./images/0.png', 'rb') as f:
+        #     a = f.read()
+        #     img = BytesIO(a)
         x, y, r = detect.calibrate(img, deviceNum)
     except Exception as e:
         logging.debug(e)
@@ -88,7 +94,7 @@ def calibrate():
 
 @bp.route('/getCalibrate', methods=['get'])
 def getCalibrate():
-    with open(os.path.join("out", "clock_calibrate.jpg"), "rb") as f:
+    with open(os.path.join("out", "dial_gauge_calibrate.jpg"), "rb") as f:
         img = f.read()
         response = make_response(img)
         response.headers['Content-Type'] = 'image/png'

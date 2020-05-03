@@ -1,4 +1,4 @@
-$(document).ready(function () {
+$(document).ready(function() {
   if (Params.existedUsername != null) {
     $("input#username").val(Params.existedUsername);
   }
@@ -6,7 +6,7 @@ $(document).ready(function () {
     $("input#password").val(Params.existedPassword);
   }
 
-  $("a#testDatabase").click(function () {
+  $("a#testDatabase").click(function() {
     const data = {
       username: $("input#username").val(),
       password: $("input#password").val(),
@@ -16,20 +16,20 @@ $(document).ready(function () {
       type: "post",
       data: data,
       async: true,
-      success: function (msg) {
+      success: function(msg) {
         if (msg == "Ok") {
           flash("Connection Success!", "success");
         } else if (msg == "error") {
           flash("Connection Failed!", "error");
         }
       },
-      error: function (err) {
+      error: function(err) {
         console.log(err);
       },
     });
   });
 
-  $("a#saveDatabase").click(function () {
+  $("a#saveDatabase").click(function() {
     const data = {
       username: $("input#username").val(),
       password: $("input#password").val(),
@@ -39,38 +39,38 @@ $(document).ready(function () {
       type: "post",
       data: data,
       async: true,
-      success: function (msg) {
+      success: function(msg) {
         if (msg == "Ok") {
           flash("Connection saved Successfully!", "success");
         } else if (msg == "error") {
           flash("Saving Connection Failed! Please check again.", "error");
         }
       },
-      error: function (err) {
+      error: function(err) {
         console.log(err);
       },
     });
   });
 
-  $("a#initDatabase").click(function () {
+  $("a#initDatabase").click(function() {
     $.ajax({
       url: Urls.server.initDatabase,
       type: "post",
       async: true,
-      success: function (msg) {
+      success: function(msg) {
         if (msg == "Ok") {
           flash("Initialization Success!", "success");
         } else {
           flash("Initialization Failed! Error Msg:<br /><br />" + msg, "error");
         }
       },
-      error: function (err) {
+      error: function(err) {
         console.log(err);
       },
     });
   });
 
-  $("a#resetDatabase").click(function () {
+  $("a#resetDatabase").click(function() {
     var checkbox = PNotify.error({
       title: "Confirmation Needed",
       text: "Reset the database means delete all existed data. Are you sure?",
@@ -94,24 +94,24 @@ $(document).ready(function () {
       },
     });
 
-    checkbox.on("pnotify.confirm", function () {
+    checkbox.on("pnotify.confirm", function() {
       $.ajax({
         url: Urls.server.resetDatabase,
         type: "post",
         async: true,
-        success: function (msg) {
+        success: function(msg) {
           if (msg == "Ok") {
             flash("Reset Success!", "success");
           } else {
             flash("Reset Failed! Error Msg:<br /><br />" + msg, "error");
           }
         },
-        error: function (err) {
+        error: function(err) {
           console.log(err);
         },
       });
     });
-    checkbox.on("pnotify.cancel", function () {
+    checkbox.on("pnotify.cancel", function() {
       checkbox.close();
     });
   });

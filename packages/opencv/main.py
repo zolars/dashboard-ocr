@@ -36,7 +36,7 @@ def calibrate(img):
     It will return the min value with angle in degrees (as a tuple), the max value with angle in degrees (as a tuple),
     and the units (as a string).
     '''
-
+    # cv2.imwrite('./out/image_origin.jpg', img)
     height, width = img.shape[:2]
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)  # convert to gray
     # gray = cv2.GaussianBlur(gray, (5, 5), 0)
@@ -44,6 +44,31 @@ def calibrate(img):
 
     # for testing, output gray image
     # cv2.imwrite('./out/%s-bw.%s' % (0, 'jpg'), gray)
+
+    # apply thresholding which helps for finding lines
+    mean_value = gray.mean()
+    if mean_value >= 200:
+        hist = cv2.calcHist([gray], [0], None, [256], [0, 256])
+
+        min_value, max_value, min_index, max_index = cv2.minMaxLoc(hist)
+        ret, image_edge = cv2.threshold(gray,
+                                        int(max_index[1]) - 7, 255,
+                                        cv2.THRESH_BINARY_INV)
+    else:
+        mean, stddev = cv2.meanStdDev(gray)
+        ret, image_edge = cv2.threshold(gray, mean_value, 255,
+                                        cv2.THRESH_BINARY_INV)
+        # image_edge = cv2.adaptiveThreshold(gray, 255,
+        #                                   cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
+        #                                   cv2.THRESH_BINARY_INV, 11,
+        #                                   0)
+
+    # found Hough Lines generally performs better without Canny / blurring, though there were a couple exceptions where it would only work with Canny / blurring
+    image_edge = cv2.medianBlur(image_edge, 5)
+    image_edge = cv2.Canny(image_edge, 50, 150)
+    image_edge = cv2.GaussianBlur(image_edge, (5, 5), 0)
+
+    cv2.imwrite('./out/image_edge.jpg', image_edge)
 
     # detect circles
     # restricting the search from 35-48% of the possible radii gives fairly good results across different samples.  Remember that
@@ -59,8 +84,9 @@ def calibrate(img):
     # minRadius：半径的最小大小 (以像素为单位).
     # maxRadius：半径的最大大小 (以像素为单位).
 
-    circles = cv2.HoughCircles(gray, cv2.HOUGH_GRADIENT, 1, 20, np.array([]),
-                               100, 50, int(height * 0.35), int(height * 0.48))
+    circles = cv2.HoughCircles(image_edge, cv2.HOUGH_GRADIENT, 1, 20,
+                               np.array([]), 100, 50, int(height * 0.35),
+                               int(height * 0.48))
     # average found circles, found it to be more accurate than trying to tune HoughCircles parameters to get just the right one
     a, b, c = circles.shape
     #获取圆的坐标x,y和半径r
@@ -117,40 +143,39 @@ def draw_calibration(img, x, y, r):
 def get_current_value(img, min_angle, max_angle, min_value, max_value, x, y,
                       r):
 
-    gray2 = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-
-    # Set threshold and maxValue
-    thresh = 105  # 175
-    maxValue = 255
-
-    # for testing purposes, found cv2.THRESH_BINARY_INV to perform the best
-    # th, dst1 = cv2.threshold(gray2, thresh, maxValue, cv2.THRESH_BINARY);
-    # th, dst2 = cv2.threshold(gray2, thresh, maxValue, cv2.THRESH_BINARY_INV);
-    # th, dst3 = cv2.threshold(gray2, thresh, maxValue, cv2.THRESH_TRUNC);
-    # th, dst4 = cv2.threshold(gray2, thresh, maxValue, cv2.THRESH_TOZERO);
-    # th, dst5 = cv2.threshold(gray2, thresh, maxValue, cv2.THRESH_TOZERO_INV);
-    # cv2.imwrite('./out/%s-dst1.%s' % (0, 'jpg'), dst1)
-    # cv2.imwrite('./out/%s-dst2.%s' % (0, 'jpg'), dst2)
-    # cv2.imwrite('./out/%s-dst3.%s' % (0, 'jpg'), dst3)
-    # cv2.imwrite('./out/%s-dst4.%s' % (0, 'jpg'), dst4)
-    # cv2.imwrite('./out/%s-dst5.%s' % (0, 'jpg'), dst5)
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
     # apply thresholding which helps for finding lines
-    th, dst2 = cv2.threshold(gray2, thresh, maxValue, cv2.THRESH_BINARY_INV)
+    mean_value = gray.mean()
+    if mean_value >= 200:
+        hist = cv2.calcHist([gray], [0], None, [256], [0, 256])
 
-    # found Hough Lines generally performs better without Canny / blurring, though there were a couple exceptions where it would only work with Canny / blurring
-    # dst2 = cv2.medianBlur(dst2, 5)
-    # dst2 = cv2.Canny(dst2, 50, 150)
-    # dst2 = cv2.GaussianBlur(dst2, (5, 5), 0)
+        min_value, max_value, min_index, max_index = cv2.minMaxLoc(hist)
+        ret, image_edge = cv2.threshold(gray,
+                                        int(max_index[1]) - 7, 255,
+                                        cv2.THRESH_BINARY_INV)
+    else:
+        mean, stddev = cv2.meanStdDev(gray)
+        ret, image_edge = cv2.threshold(gray, mean_value + 15, 255,
+                                        cv2.THRESH_BINARY_INV)
+        # image_edge = cv2.adaptiveThreshold(gray, 255,
+        #                                   cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
+        #                                   cv2.THRESH_BINARY_INV, 11,
+        #                                   0)
 
     # for testing, show image after thresholding
-    # cv2.imwrite('./out/%s-tempdst2.%s' % (0, 'jpg'), dst2)
+    # cv2.imwrite('./out/%s-bin.%s' % (0, 'jpg'), image_edge)
+
+    # found Hough Lines generally performs better without Canny / blurring, though there were a couple exceptions where it would only work with Canny / blurring
+    # image_edge = cv2.medianBlur(image_edge, 5)
+    # image_edge = cv2.Canny(image_edge, 50, 150)
+    # image_edge = cv2.GaussianBlur(image_edge, (5, 5), 0)
 
     # find lines
     minLineLength = 10
     maxLineGap = 0
     lines = cv2.HoughLinesP(
-        image=dst2,
+        image=image_edge,
         rho=3,
         theta=np.pi / 180,
         threshold=100,
@@ -202,7 +227,7 @@ def get_current_value(img, min_angle, max_angle, min_value, max_value, x, y,
         if dist_2_pts(x1, y1, x2, y2) > max_length:
             xx1, yy1, xx2, yy2 = x1, y1, x2, y2
             max_length = dist_2_pts(x1, y1, x2, y2)
-        cv2.line(img, (x1, y1), (x2, y2), (0, 0, 255), 2)
+        # cv2.line(img, (x1, y1), (x2, y2), (0, 0, 255), 2)
 
     # assumes the longest line is the best one
     x1, y1, x2, y2 = xx1, yy1, xx2, yy2

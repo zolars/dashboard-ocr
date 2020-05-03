@@ -35,13 +35,11 @@ def preview(img):
     img_output = Image.open(BytesIO(plt_bytes))
     img_output.save("./out/preview.png")
 
-    clock_num, tvmonitor_num = 0, 0
-    if 'clock' in cropped:
-        clock_num = len(cropped['clock'])
-    if 'tvmonitor' in cropped:
-        tvmonitor_num = len(cropped['tvmonitor'])
+    dial_gauge_num = 0
+    if 'dial_gauge' in cropped:
+        dial_gauge_num = len(cropped['dial_gauge'])
 
-    return clock_num, tvmonitor_num
+    return dial_gauge_num
 
 
 def calibrate(img, deviceNum):
@@ -49,17 +47,19 @@ def calibrate(img, deviceNum):
     _, cropped = runYOLO(img)
 
     img_output = None
-    # clock images collection
-    if 'clock' in cropped:
-        i = cropped['clock'][deviceNum]
+    # dial_gauge images collection
+    if 'dial_gauge' in cropped:
+        i = cropped['dial_gauge'][deviceNum]
         img_crop = img.crop((i[0] - 20, i[1] - 20, i[2] + 20, i[3] + 20))
 
         img_input = cv2.cvtColor(np.asarray(img_crop), cv2.COLOR_RGB2BGR)
         x, y, r = opencv.calibrate(img_input)
         img_output = opencv.draw_calibration(img_input, x, y, r)
-        cv2.imwrite("./out/clock_calibrate.jpg", img_output)
+        cv2.imwrite("./out/dial_gauge_calibrate.jpg", img_output)
 
         return x, y, r
+    else:
+        logging.error("Cannot find devices...")
 
 
 def ocr(img, min_angle, max_angle, min_value, max_value, x, y, r):
@@ -67,12 +67,12 @@ def ocr(img, min_angle, max_angle, min_value, max_value, x, y, r):
     _, cropped = runYOLO(img)
 
     img_output = None
-    # clock images collection
-    if 'clock' in cropped:
+    # dial_gauge images collection
+    if 'dial_gauge' in cropped:
         count = 0
-        for i in cropped['clock']:
+        for i in cropped['dial_gauge']:
             img_crop = img.crop((i[0] - 20, i[1] - 20, i[2] + 20, i[3] + 20))
-            # img_crop.save("./out/clock_" + str(count) + ".jpg")
+            # img_crop.save("./out/dial_gauge_" + str(count) + ".jpg")
 
             img_input = cv2.cvtColor(np.asarray(img_crop), cv2.COLOR_RGB2BGR)
             value = opencv.get_current_value(img_input, min_angle, max_angle,

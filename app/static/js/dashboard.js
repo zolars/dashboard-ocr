@@ -1,4 +1,4 @@
-$(document).ready(function () {
+$(document).ready(function() {
   console.log("Params", Params);
   console.log("Urls", Urls);
 
@@ -23,17 +23,17 @@ $(document).ready(function () {
         url: Urls.server.data,
         data: data,
         dataType: "json",
-        success: function (result) {
+        success: function(result) {
           charts[value.id].setOption(result);
         },
-        error: function (err) {
+        error: function(err) {
           console.log(err.textStatus);
         },
       });
     }
   }
 
-  $(function () {
+  $(function() {
     fetchData(false);
     setInterval(fetchData, 2000);
   });

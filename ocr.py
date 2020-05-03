@@ -35,11 +35,14 @@ class MySQL:
                 passwd=password,  # password
                 charset='utf8',
             )
-        self._cur = self._conn.cursor()
+        self._cr = self._conn.cursor()
 
     def execute(self, sql):
         logging.info(sql)
-        self._cur.execute(sql)
+        try:
+            self._cur.execute(sql)
+        except Exception as err:
+            logging.error(err)
 
     def fetchall(self, sql):
         logging.info(sql)
@@ -72,10 +75,10 @@ def ocr(img, type, num, min_angle, max_angle, min_value, max_value, x, y, r):
 
     logging.info("Run OpenCV...")
     value = None
-    # clock images collection
-    if 'clock' in cropped:
+    # dial_gauge images collection
+    if 'dial_gauge' in cropped:
 
-        i = cropped['clock'][num]
+        i = cropped['dial_gauge'][num]
         img_crop = img.crop((i[0] - 20, i[1] - 20, i[2] + 20, i[3] + 20))
 
         img_input = cv2.cvtColor(np.asarray(img_crop), cv2.COLOR_RGB2BGR)
